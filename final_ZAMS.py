@@ -191,7 +191,7 @@ home = expanduser("~")
 # sub dir, name, center, radius, number of members.
 
 # Location of the data_output file
-out_dir = home+'/clusters_out/washington_KDE-Scott/'
+out_dir = home+'/clusters/clusters_out/washington_KDE-Scott/'
 data_out_file = out_dir+'data_output'
 
 sub_dirs, cl_names, centers, radius, members = [], [], [[],[]], [], []
@@ -214,8 +214,8 @@ with open(data_out_file, mode="r") as d_o_f:
 # cluster.
 
 # Location of the data_input file
-main_dir = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/'
-data_isos_file = main_dir+'codigo/clusters_data_isos.dat'
+ocaat_path = '/media/rest/github/OCAAT_code/'
+data_isos_file = ocaat_path+'clusters_data_isos.dat'
 
 extin, ages, metal, dist_mods = [], [], [], []
 for cluster in cl_names:
@@ -237,7 +237,7 @@ for cluster in cl_names:
 # 3- Read the photometric data file for each cluster.
 
 # Location of the photometric data file for each cluster.
-data_phot = main_dir+'data_all/cumulos-datos-fotometricos/'
+data_phot = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/data_all/cumulos-datos-fotometricos/'
 
 
 # Stores the CMD sequence obtained for each cluster.
@@ -273,7 +273,7 @@ for indx, sub_dir in enumerate(sub_dirs):
         gio.get_in_out(center_cl, clust_rad[0], acpt_stars, rjct_stars)
         
         # Path where the code is running
-        mypath = realpath(join(getcwd(), dirname(__file__)))
+        mypath = ocaat_path
         clust_name = cluster
         # Get manually fitted parameters for cluster, if these exist.
         cl_e_bv, cl_age, cl_feh, cl_dmod, iso_moved, zams_iso = g_i(mypath,
