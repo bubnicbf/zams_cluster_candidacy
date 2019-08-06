@@ -393,16 +393,18 @@ for indx, sub_dir in enumerate(sub_dirs):
                                                stars_acpt_temp[1],\
                                                cl_e_bv, cl_dmod)  
         sz_pt = 10 if (len(stars_in_rjct)+len(stars_in)) > 1000 else 20
-        plt.scatter(col_intrsc_a, mag_intrsc_a, marker='o', c='k', 
+#        plt.scatter(col_intrsc_a, mag_intrsc_a, marker='o', c='k', 
+#                    s=sz_pt, zorder=2)
+        plt.scatter(stars_acpt_temp[0], stars_acpt_temp[1], marker='o', c='k', 
                     s=sz_pt, zorder=2)
         # Add text box
-        text1 = r'$E_{(B-V)} = %0.2f}$' '\n' % cl_e_bv
-        text2 = r'$Age = %0.3f}$' '\n' % cl_age
-        text3 = r'$[Fe/H] = %0.2f}$' '\n' % cl_feh
-        text4 = r'$(m-M)_o = %0.2f}$' % cl_dmod
-        text = text1+text2+text3+text4
-        plt.text(0.75, 0.02, text, transform = ax2.transAxes,
-                 bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
+#        text1 = r'$E_{(B-V)} = %0.2f}$' '\n' % cl_e_bv
+#        text2 = r'$Age = %0.3f}$' '\n' % cl_age
+#        text3 = r'$[Fe/H] = %0.2f}$' '\n' % cl_feh
+#        text4 = r'$(m-M)_o = %0.2f}$' % cl_dmod
+#        text = text1+text2+text3+text4
+#        plt.text(0.75, 0.02, text, transform = ax2.transAxes,
+#                 bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
                     
                     
         # Cluster's stars CMD of N_c stars (the approx number of member stars)
