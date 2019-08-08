@@ -307,14 +307,11 @@ for indx, sub_dir in enumerate(sub_dirs):
         # y1/y2 = 2.5 
         fig = plt.figure(figsize=(20, 25)) # create the top-level container
         gs1 = gridspec.GridSpec(10, 8)  # create a GridSpec object
-#        fig = plt.figure(figsize=(25, 20)) # create the top-level container
-#        gs1 = gridspec.GridSpec(8, 10)  # create a GridSpec object
         
         fig.suptitle('\n%s' % sub_dir+'/'+cluster, fontsize=30)
         
         # Field stars CMD (stars outside cluster's radius)
         ax1 = plt.subplot(gs1[1:5, 0:4])
-#        ax1 = plt.subplot(gs1[1:7, 0:5])
         #Set plot limits
         plt.xlim(col1_min, col1_max)
         plt.ylim(mag_min, mag_max)
@@ -348,17 +345,12 @@ for indx, sub_dir in enumerate(sub_dirs):
     
         # Cluster's stars CMD (stars inside cluster's radius)
         ax2 = plt.subplot(gs1[1:5, 4:8])
-#        ax2 = plt.subplot(gs1[1:7, 5:10])
         #Set plot limits
         plt.xlim(col1_min, col1_max)
         plt.ylim(mag_min, mag_max)
-#        plt.xlim(-2., 4.)
-#        plt.ylim(10., -4)
         #Set axis labels
         plt.xlabel(r'$C-T_1$', fontsize=26)
         plt.ylabel(r'$T_1$', fontsize=26)
-#        plt.xlabel(r'$(C-T_1)_o$', fontsize=26)
-#        plt.ylabel(r'$M_{T_1}$', fontsize=26)
         ax2.tick_params(axis='both', which='major', labelsize=24)
         # Set minor ticks
         ax2.minorticks_on()
@@ -376,14 +368,8 @@ for indx, sub_dir in enumerate(sub_dirs):
         for star in stars_in_rjct:
             stars_rjct_temp[0].append(star[5])
             stars_rjct_temp[1].append(star[3])
-        # Get intrinsic color and magnitudes.
-#        col_intrsc_r, mag_intrsc_r = intrsc_values(stars_rjct_temp[0],
-#                                               stars_rjct_temp[1],\
-#                                               cl_e_bv, cl_dmod)             
         plt.scatter(stars_rjct_temp[0], stars_rjct_temp[1], marker='x', c='k', 
                     s=60, lw=1.5, zorder=1)
-#        plt.scatter(col_intrsc_r, mag_intrsc_r, marker='x', c='k', 
-#                    s=60, lw=1.5, zorder=1)
         stars_acpt_temp = [[], []]
         for star in stars_in:
             stars_acpt_temp[0].append(star[5])
@@ -393,18 +379,8 @@ for indx, sub_dir in enumerate(sub_dirs):
                                                stars_acpt_temp[1],\
                                                cl_e_bv, cl_dmod)  
         sz_pt = 10 if (len(stars_in_rjct)+len(stars_in)) > 1000 else 20
-#        plt.scatter(col_intrsc_a, mag_intrsc_a, marker='o', c='k', 
-#                    s=sz_pt, zorder=2)
         plt.scatter(stars_acpt_temp[0], stars_acpt_temp[1], marker='o', c='k', 
                     s=sz_pt, zorder=2)
-        # Add text box
-#        text1 = r'$E_{(B-V)} = %0.2f}$' '\n' % cl_e_bv
-#        text2 = r'$Age = %0.3f}$' '\n' % cl_age
-#        text3 = r'$[Fe/H] = %0.2f}$' '\n' % cl_feh
-#        text4 = r'$(m-M)_o = %0.2f}$' % cl_dmod
-#        text = text1+text2+text3+text4
-#        plt.text(0.75, 0.02, text, transform = ax2.transAxes,
-#                 bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
                     
                     
         # Cluster's stars CMD of N_c stars (the approx number of member stars)
@@ -557,7 +533,6 @@ for indx, sub_dir in enumerate(sub_dirs):
         fig.tight_layout()
         # Generate output file for each data file.
         plt.savefig(join(out_dir+'fitted_zams'+'/'+cluster+'_ZAMS.png'), dpi=150)
-#        plt.savefig(join(out_dir+'fitted_zams/ruben'+'/'+cluster+'_ruben.png'), dpi=150)
         # Close to release memory.
         plt.clf()
         plt.close()
@@ -569,9 +544,6 @@ for indx, sub_dir in enumerate(sub_dirs):
         final_zams_params.append([cluster, cl_e_bv, cl_age, cl_feh, cl_dmod])
 
 
-
-#print 'stop'
-#raw_input()
 
 # Second part of the code.
 
