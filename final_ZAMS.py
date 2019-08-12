@@ -110,7 +110,7 @@ def func(x, a, b, c):
 # it.
 # 1st sub-list: Names of clusters
 # 2nd: values to generate levels with np.arange()
-# 3rd: x_min, x_max, y_min and y_max. Rabges to reject points.
+# 3rd: x_min, x_max, y_min and y_max. Ranges to reject points.
 # 4th: min level value to accept and min level number to accept.
 f_t_names = ['H88-245', 'HS130', 'KMHK1702', 'LW469', 'RUP1', 'KMHK128', 'L115']
 
@@ -129,8 +129,8 @@ fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
                   
 def contour_levels(cluster, x, y, kde):
     '''This is the central function. It generates the countour plots around the
-    cluster members. The points of these contour levels are used to trace the
-    ZAMS for each cluster.
+    cluster members. The extreme points of these contour levels are used to trace
+    the ZAMS fiducial line for each cluster.
     '''
 
     fine_tune = False
@@ -183,12 +183,11 @@ def contour_levels(cluster, x, y, kde):
             
 
 # *********************************
+# 1- Read data_output file to store names and parameters of each cluster:
+# sub dir, name, center, radius, number of members.
 
 # Set 'home' dir.
 home = expanduser("~")
-
-# 1- Read data_output file to store names and parameters of each cluster:
-# sub dir, name, center, radius, number of members.
 
 # Location of the data_output file
 out_dir = home+'/clusters/clusters_out/washington_KDE-Scott/'
@@ -211,7 +210,7 @@ with open(data_out_file, mode="r") as d_o_f:
 
 # *********************************
 # 2- Read clusters_data_isos.dat' file to store isochrone parameters for each
-# cluster.
+# cluster (for plotting purposes only).
 
 # Location of the data_input file
 ocaat_path = '/media/rest/github/OCAAT_code/'
@@ -237,22 +236,22 @@ for cluster in cl_names:
 # 3- Read the photometric data file for each cluster.
 
 # Location of the photometric data file for each cluster.
-data_phot = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/data_all/cumulos-datos-fotometricos/'
-
+data_phot = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/data_all/\
+cumulos-datos-fotometricos/'
 
 # Stores the CMD sequence obtained for each cluster.
 final_zams = []
-# Also store the parameters associated with this cluster.
+# Also store the parameters associated with each cluster.
 final_zams_params = []
 
 for indx, sub_dir in enumerate(sub_dirs):
     cluster = cl_names[indx]
     
 #    if cluster in gabriel_accept:
-    if cluster in ruben_accept:
+#    if cluster in ruben_accept:
 #    if cluster == 'L115':
-#    use_all_clusters = True
-#    if use_all_clusters:
+    use_all_clusters = True
+    if use_all_clusters:
         print sub_dir, cluster
         
         filename = glob.glob(join(data_phot, sub_dir, cluster + '.*'))[0]
