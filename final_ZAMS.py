@@ -249,9 +249,9 @@ for indx, sub_dir in enumerate(sub_dirs):
     
 #    if cluster in gabriel_accept:
 #    if cluster in ruben_accept:
-#    if cluster == 'L115':
-    use_all_clusters = True
-    if use_all_clusters:
+    if cluster == 'H88-245':
+#    use_all_clusters = True
+#    if use_all_clusters:
         print sub_dir, cluster
         
         filename = glob.glob(join(data_phot, sub_dir, cluster + '.*'))[0]
@@ -504,15 +504,20 @@ for indx, sub_dir in enumerate(sub_dirs):
             # Call the function that returns the sequence determined by the two
             # points further from each other in each contour level.
             sequence = contour_levels(cluster, x, y, kde)
-    
-            # Obtain and plot the sequence's fitting polinome.
-            poli_order = 3 # Order of the polynome.
-            poli = np.polyfit(sequence[1], sequence[0], poli_order)
-            y_pol = np.linspace(min(sequence[1]), max(sequence[1]), 50)
-            p = np.poly1d(poli)
-            x_pol = [p(i) for i in y_pol]
-            plt.plot(x_pol, y_pol, c='k', lw=2, zorder=6)
             
+            # If the contour points returns an empty list don't attempt to
+            # plot the polynomial fit.
+            if sequence[0]:
+                # Obtain and plot the sequence's fitting polinome.
+                poli_order = 3 # Order of the polynome.
+                poli = np.polyfit(sequence[1], sequence[0], poli_order)
+                y_pol = np.linspace(min(sequence[1]), max(sequence[1]), 50)
+                p = np.poly1d(poli)
+                x_pol = [p(i) for i in y_pol]
+                plt.plot(x_pol, y_pol, c='k', lw=2, zorder=6)
+            else:
+                x_pol, y_pol = [], []
+                
             # Write data to output file.
             out_file = join(out_dir+'fitted_zams'+'/'+cluster+'_ZAMS.dat')
             name = [sub_dir+'/'+cluster]*len(x_pol)
@@ -545,6 +550,7 @@ for indx, sub_dir in enumerate(sub_dirs):
 
 
 # Second part of the code.
+print 'Plotting sequences by metallicity interval'
 
 # Get ZAMS.
 zams_file = 'codigo/zams_4_isos.data'
