@@ -36,8 +36,7 @@ import functions.get_in_out as gio
 from functions.get_isochrones import get_isochrones as g_i
 
 import numpy as np
-from os import getcwd
-from os.path import join, getsize, realpath, dirname
+from os.path import join, getsize
 from os.path import expanduser
 import glob
 from scipy import stats
@@ -553,7 +552,7 @@ for indx, sub_dir in enumerate(sub_dirs):
 print 'Plotting sequences by metallicity interval'
 
 # Get ZAMS.
-zams_file = 'codigo/zams_4_isos.data'
+zams_file = 'zams_4_isos.data'
 data = np.loadtxt(zams_file, unpack=True)
 # Convert z to [Fe/H] using the y=A+B*log10(x) zunzun.com function and the
 # x,y values:
