@@ -246,9 +246,9 @@ final_zams_params = []
 for indx, sub_dir in enumerate(sub_dirs):
     cluster = cl_names[indx]
     
-#    if cluster in gabriel_accept:
+    if cluster in gabriel_accept:
 #    if cluster in ruben_accept:
-    if cluster == 'H88-245':
+#    if cluster == 'H88-245':
 #    use_all_clusters = True
 #    if use_all_clusters:
         print sub_dir, cluster
@@ -410,9 +410,11 @@ for indx, sub_dir in enumerate(sub_dirs):
                 m_p_m_temp[2].append(star[8])
             # Create new list with inverted values so higher prob stars are on top.
             m_p_m_temp_inv = [i[::-1] for i in m_p_m_temp]
+            v_min, v_max = round(min(m_p_m_temp[2]),2),\
+            round(max(m_p_m_temp[2]),2)
             plt.scatter(m_p_m_temp_inv[0], m_p_m_temp_inv[1], marker='o', 
-                        c=m_p_m_temp_inv[2], s=100, cmap=cm, lw=0.8, vmin=0, vmax=1,\
-                        zorder=5)
+                        c=m_p_m_temp_inv[2], s=100, cmap=cm, lw=0.8, vmin=v_min,\
+                        vmax=v_max, zorder=5)
             # If list is not empty.
             if m_p_m_temp_inv[1]:
                 # Plot error bars at several mag values.
@@ -426,6 +428,11 @@ for indx, sub_dir in enumerate(sub_dirs):
             plt.plot(zams_iso[1], zams_iso[0], c='k', ls='--', lw=1.5)
             # Plot isochrone.
             plt.plot(iso_moved[1], iso_moved[0], 'k', lw=2.)
+            # Plot colorbar.
+            cbaxes3 = fig.add_axes([0.4, 0.46, 0.07, 0.01])
+            cbar3 = plt.colorbar(cax=cbaxes3, ticks=[v_min,v_max],
+                                 orientation='horizontal')
+            cbar3.ax.tick_params(labelsize=15)
                    
     
 
@@ -488,8 +495,10 @@ for indx, sub_dir in enumerate(sub_dirs):
             ax4.grid(b=True, which='major', color='gray', linestyle='--', lw=1)
             # This reversed colormap means higher prob stars will look redder.
             cm = plt.cm.get_cmap('RdYlBu_r')
+            v_min, v_max = round(min(m_p_m_temp[2]),2),\
+            round(max(m_p_m_temp[2]),2)
             plt.scatter(col_intrsc, mag_intrsc, marker='o', c=m_p_m_temp_inv[2],
-                        s=100, cmap=cm, lw=0.8, vmin=0, vmax=1, zorder=2)
+                        s=100, cmap=cm, lw=0.8, vmin=v_min, vmax=v_max, zorder=2)
     
             # Get KDE for CMD intrinsic position of most probable members.
             x, y = np.mgrid[col1_min:col1_max:100j, mag_min:mag_max:100j]
@@ -541,15 +550,16 @@ for indx, sub_dir in enumerate(sub_dirs):
         plt.close()
 
         
-        # Store the sequence obtained with this cluster in final list.
-        final_zams.append(sequence)
-        # Also store the parameters associated with this cluster.
-        final_zams_params.append([cluster, cl_e_bv, cl_age, cl_feh, cl_dmod])
+        if sequence[0]:
+            # Store the sequence obtained with this cluster in final list.
+            final_zams.append(sequence)
+            # Also store the parameters associated with this cluster.
+            final_zams_params.append([cluster, cl_e_bv, cl_age, cl_feh, cl_dmod])
 
 
 
 # Second part of the code.
-print 'Plotting sequences by metallicity interval'
+print '\nPlotting sequences by metallicity interval'
 
 # Get ZAMS.
 zams_file = 'zams_4_isos.data'
@@ -566,7 +576,7 @@ data = np.loadtxt(zams_file, unpack=True)
 metals_z = [0.001, 0.004, 0.008, 0.019]
 metals_feh = [-1.3, -0.7, -0.4, 0.0]
 
-# List that holds all the isochroned of different metallicities.
+# List that holds all the isochrones of different metallicities.
 zam_met = [[] for _ in range(len(metals_z))]
 
 # Store each isochrone of a given metallicity in a list.
