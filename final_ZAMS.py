@@ -124,7 +124,8 @@ f_t_xylim = [[-1., 1., -0.2, 1.7], [-1., 1., 0.4, 3.6], [-1., 1., 1.3, 3.6],\
 f_t_level = [[0.1, 1], [-0.1, -1], [-0.1, -1], [-0.1, -1], [0.1, 1], [0.1, 1], \
 [-0.1, -1]]
 
-fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
+#fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
+fine_tune_list = [[]]
 
                   
 def contour_levels(cluster, x, y, kde):
@@ -249,9 +250,9 @@ for indx, sub_dir in enumerate(sub_dirs):
     
 #    if cluster in gabriel_accept:
 #    if cluster in ruben_accept:
-    if cluster == 'NGC2324':
-#    use_all_clusters = True
-#    if use_all_clusters:
+#    if cluster == 'NGC2324':
+    use_all_clusters = True
+    if use_all_clusters:
         print sub_dir, cluster
         
         filename = glob.glob(join(data_phot, sub_dir, cluster + '.*'))[0]
@@ -297,13 +298,15 @@ for indx, sub_dir in enumerate(sub_dirs):
     
     #5- Outline of steps that follow:
     #
-    # Get CMD coordinates and probabilities from most_prob_memb_avrg list.
-    # Calculate a probability limit aboce which stars will be used to draw the
-    # final sequence.
+    # Get CMD coordinates and probabilities from most_prob_memb_avrg list. Used
+    # for the third plot.
+    # Calculate a probability limit above which stars will be used to draw the
+    # final sequence using a Gaussian fit.
     # Obtain intrinsic position of stars above this probability limit.
     # Obtain new CMD limits based on these intrinsic positions.
-    # Assign weights to those stars according to the probabilities they have.
-    # Obtain the KDE for these weighted stars.
+    # Assign weights to these corrected stars according to the probabilities
+    # they have.
+    # Obtain the (weighted) KDE for these weighted stars.
     # Generate a fiducial sequence making use of the KDE's contours.
     # Interpolate this sequence to obtain the final sequence.
     # Write final interpolated sequence to data file.
@@ -607,8 +610,8 @@ for indx, sub_dir in enumerate(sub_dirs):
         plt.close()
 
 
-import sys
-sys.exit('stop')
+#import sys
+#sys.exit('stop')
 
 # Second part of the code.
 print '\nPlotting sequences by metallicity interval'
