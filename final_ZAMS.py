@@ -594,11 +594,6 @@ for indx, sub_dir in enumerate(sub_dirs):
             # Plot polynomial fit only if list is not empty.
             if x_pol:
                 plt.plot(x_pol, y_pol, c='k', lw=2, zorder=6)  
-            # Plot colorbar.
-            cbaxes4 = fig.add_axes([0.58, 0.46, 0.07, 0.01])
-            cbar4 = plt.colorbar(cax=cbaxes4, ticks=[v_min,v_max],
-                                 orientation='horizontal')
-            cbar4.ax.tick_params(labelsize=15)
                      
     
      
