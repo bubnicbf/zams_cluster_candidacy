@@ -570,7 +570,7 @@ for indx, sub_dir in enumerate(sub_dirs):
             text = text1+text2+text3+text4
             plt.text(0.7, 0.83, text, transform = ax4.transAxes,
                      bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
-            plt.text(0.05, 0.83, r'$\mu=%0.2f$' % mu, transform = ax4.transAxes,
+            plt.text(0.05, 0.9, r'$P_{lim}=%0.2f$' % mu, transform = ax4.transAxes,
                      bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
             # Set minor ticks
             ax4.minorticks_on()
