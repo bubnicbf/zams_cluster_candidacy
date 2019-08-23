@@ -901,7 +901,8 @@ def make_final_plot(metal_range):
         
             fig.tight_layout()
             # Generate output file for each data file.
-            plt.savefig(join(out_dir+'final_ZAMS_ALL.png'), dpi=150)        
+            plt.savefig(join(out_dir+'fitted_zams/'+'final_ZAMS_ALL.png'),
+                        dpi=150)
 
     else:
         print 'Skipped %d' % metal_range
