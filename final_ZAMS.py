@@ -776,7 +776,8 @@ def make_final_plot(metal_range):
         
         fig.tight_layout()
         # Generate output file for each data file.
-        plt.savefig(join(out_dir+'final_ZAMS_%s.png' % metal_range), dpi=150)
+        plt.savefig(join(out_dir+'fitted_zams/'+'final_ZAMS_%s.png' % \
+        metal_range), dpi=150)
         
     
         # Plot CMD for all sequences only once.
