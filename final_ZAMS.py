@@ -50,7 +50,8 @@ from scipy.stats import norm
 
 
 
-# This list stores the clusters accepted by hand by Piatti.
+# These lists store the clusters accepted manually.
+
 piatti_accept = ['AM3', 'BSDL3158', 'BSDL594', 'BSDL761', 'C11', 'CZ26',
                  'CZ30', 'H88-26', 'H88-52', 'H88-55', 'HAF11', 'HS130',
                  'HS154', 'HS156', 'HS178', 'HS38', 'HW22', 'HW31', 'HW40',
@@ -77,6 +78,7 @@ ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
                 'H88-26', 'H88-55', 'H88-333', 'HS38', 'LW469', 'NGC2093',
                 'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
                 'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
+
 
 def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
     '''
@@ -105,34 +107,32 @@ def func(x, a, b, c):
     
 
 
-
-# This list holds the names and tuning parameters for those clusters that need
-# it.
-# 1st sub-list: Names of clusters
-# 2nd: values to generate levels with np.arange()
-# 3rd: x_min, x_max, y_min and y_max. Ranges to reject points.
-# 4th: min level value to accept and min level number to accept.
-f_t_names = ['H88-245', 'HS130', 'KMHK1702', 'LW469', 'RUP1', 'KMHK128', 'L115']
-
-f_t_range = [[0., 1.01, 0.2], [0., 1.01, 0.05], [0.3, 2.11, 0.3], \
-[0.2, 1.21, 0.2], [0.05, 0.351, 0.05], [0.05, 1.251, 0.05], [0.15, 0.91, 0.15]]
-
-f_t_xylim = [[-1., 1., -0.2, 1.7], [-1., 1., 0.4, 3.6], [-1., 1., 1.3, 3.6],\
-[-1., 1., 1.2, 4.], [-1., 3., 1., 6.8], [-1., 0.5, 1.8, 3.6], \
-[-1., 1, -0.4, 3]]
-
-f_t_level = [[0.1, 1], [-0.1, -1], [-0.1, -1], [-0.1, -1], [0.1, 1], [0.1, 1], \
-[-0.1, -1]]
-
-#fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
-fine_tune_list = [[]]
-
-                  
 def contour_levels(cluster, x, y, kde):
     '''This is the central function. It generates the countour plots around the
     cluster members. The extreme points of these contour levels are used to trace
     the ZAMS fiducial line for each cluster.
     '''
+    
+    # This list holds the names and tuning parameters for those clusters that need
+    # it.
+    # 1st sub-list: Names of clusters
+    # 2nd: values to generate levels with np.arange()
+    # 3rd: x_min, x_max, y_min and y_max. Ranges to reject points.
+    # 4th: min level value to accept and min level number to accept.
+    f_t_names = ['H88-245', 'HS130', 'KMHK1702', 'LW469', 'RUP1', 'KMHK128', 'L115']
+    
+    f_t_range = [[0., 1.01, 0.2], [0., 1.01, 0.05], [0.3, 2.11, 0.3], \
+    [0.2, 1.21, 0.2], [0.05, 0.351, 0.05], [0.05, 1.251, 0.05], [0.15, 0.91, 0.15]]
+    
+    f_t_xylim = [[-1., 1., -0.2, 1.7], [-1., 1., 0.4, 3.6], [-1., 1., 1.3, 3.6],\
+    [-1., 1., 1.2, 4.], [-1., 3., 1., 6.8], [-1., 0.5, 1.8, 3.6], \
+    [-1., 1, -0.4, 3]]
+    
+    f_t_level = [[0.1, 1], [-0.1, -1], [-0.1, -1], [-0.1, -1], [0.1, 1], [0.1, 1], \
+    [-0.1, -1]]
+    
+    #fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
+    fine_tune_list = [[]]
 
     fine_tune = False
     if cluster in fine_tune_list[0]:
@@ -184,56 +184,75 @@ def contour_levels(cluster, x, y, kde):
             
 
 
-# Read data_output file to store names and parameters of each cluster:
-# sub dir, name, center, radius, number of members.
-
-# Set 'home' dir.
-home = expanduser("~")
-
-# Location of the data_output file
-out_dir = home+'/clusters/clusters_out/washington_KDE-Scott/'
-data_out_file = out_dir+'data_output'
-
-sub_dirs, cl_names, centers, radius, members = [], [], [[],[]], [], []
-with open(data_out_file, mode="r") as d_o_f:
-    for line in d_o_f:
-        li=line.strip()
-        # Jump comments.
-        if not li.startswith("#"):
-            reader = li.split()            
-            sub_dirs.append(reader[0].split('/')[0])
-            cl_names.append(reader[0].split('/')[1])
-            centers[0].append(float(reader[1]))
-            centers[1].append(float(reader[2]))
-            radius.append(float(reader[3]))
-            members.append(float(reader[7]))
-
-
-
-# Read clusters_data_isos.dat' file to store isochrone parameters for each
-# cluster (for plotting purposes only).
-
-# Location of the data_input file
-ocaat_path = '/media/rest/github/OCAAT_code/'
-data_isos_file = ocaat_path+'clusters_data_isos.dat'
-
-extin, ages, metal, dist_mods = [], [], [], []
-for cluster in cl_names:
-    with open(data_isos_file, mode="r") as d_i_f:
-        for line in d_i_f:
+def get_cluster_params():
+    '''
+    Read data_output file to store names and parameters of each cluster:
+    sub dir, name, center, radius, number of members.
+    '''
+    
+    # Set 'home' dir.
+    home = expanduser("~")
+    
+    # Location of the data_output file
+    out_dir = home+'/clusters/clusters_out/washington_KDE-Scott/'
+    data_out_file = out_dir+'data_output'
+    
+    sub_dirs, cl_names, centers, radius, members = [], [], [[],[]], [], []
+    with open(data_out_file, mode="r") as d_o_f:
+        for line in d_o_f:
             li=line.strip()
             # Jump comments.
             if not li.startswith("#"):
-                reader = li.split()     
-                if reader[0] == cluster:
-                    extin.append(reader[1])
-                    ages.append(float(reader[2]))
-                    metal.append(float(reader[3]))
-                    dist_mods.append(float(reader[4]))
-                    break
+                reader = li.split()            
+                sub_dirs.append(reader[0].split('/')[0])
+                cl_names.append(reader[0].split('/')[1])
+                centers[0].append(float(reader[1]))
+                centers[1].append(float(reader[2]))
+                radius.append(float(reader[3]))
+                members.append(float(reader[7]))
+                
+    return sub_dirs, cl_names, centers, radius, members, out_dir
 
 
 
+def get_iso_params(cl_names):
+    '''
+    Read clusters_data_isos.dat file to store isochrone parameters for each
+    cluster (for plotting purposes only).
+    '''
+    
+    # Location of the data_input file
+    ocaat_path = '/media/rest/github/OCAAT_code/'
+    data_isos_file = ocaat_path+'clusters_data_isos.dat'
+    
+    extin, ages, metal, dist_mods = [], [], [], []
+    for cluster in cl_names:
+        with open(data_isos_file, mode="r") as d_i_f:
+            for line in d_i_f:
+                li=line.strip()
+                # Jump comments.
+                if not li.startswith("#"):
+                    reader = li.split()     
+                    if reader[0] == cluster:
+                        extin.append(reader[1])
+                        ages.append(float(reader[2]))
+                        metal.append(float(reader[3]))
+                        dist_mods.append(float(reader[4]))
+                        break
+                    
+    return extin, ages, metal, dist_mods, ocaat_path
+
+
+
+
+# Call function to obtain clusters locations, names. etc.
+sub_dirs, cl_names, centers, radius, members, out_dir = get_cluster_params()
+
+
+# Call function to obtain each cluster's fitted isochrone data.
+extin, ages, metal, dist_mods, ocaat_path = get_iso_params(cl_names)
+
+6
 # Ask for minimum probability threshold.
 use_mu = False
 prob_quest = raw_input('Use mu as probability threshold? (y/n): ')
@@ -243,12 +262,6 @@ else:
     min_prob = float(raw_input('Input minimum probability value to use: '))
 
 
-
-# Read the photometric data file for each cluster.
-
-# Location of the photometric data file for each cluster.
-data_phot = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/data_all/\
-cumulos-datos-fotometricos/'
 
 # Stores the CMD sequence obtained for each cluster.
 final_zams = []
@@ -264,6 +277,10 @@ for indx, sub_dir in enumerate(sub_dirs):
     use_all_clusters = True
     if use_all_clusters:
         print sub_dir, cluster
+        
+        # Location of the photometric data file for each cluster.
+        data_phot = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/\
+data_all/cumulos-datos-fotometricos/'        
         
         # Get photometric data for cluster.
         filename = glob.glob(join(data_phot, sub_dir, cluster + '.*'))[0]
@@ -322,7 +339,6 @@ for indx, sub_dir in enumerate(sub_dirs):
     # Interpolate this sequence to obtain the final sequence.
     # Write final interpolated sequence to data file.
 
-    
         # Check if decont algorithm was applied.
         if not(flag_area_stronger):
             
@@ -365,16 +381,18 @@ for indx, sub_dir in enumerate(sub_dirs):
             center_x = (col1_max_int + col1_min_int)/2.
             center_y = (mag_max_int + mag_min_int)/2.
             if delta_y >= delta_x:
-                col1_min_int, col1_max_int = (center_x-delta_y/2.), (center_x+delta_y/2.)
+                col1_min_int, col1_max_int = (center_x-delta_y/2.),\
+                (center_x+delta_y/2.)
             else:
-                mag_max_int, mag_min_int = (center_y-delta_x/2.), (center_y+delta_x/2.) 
+                mag_max_int, mag_min_int = (center_y-delta_x/2.),\
+                (center_y+delta_x/2.) 
                           
                           
-            # Generate new stars located at the same positions of each star in the list
-            # of most probable members. The number of new stars generated in each star
-            # position is the weight assigned to that star times 10. We do this so
-            # the KDE obtained below incorporates the information of the weights, ie:
-            # the membership probabilities.
+            # Generate new stars located at the same positions of each star in
+            # the list of most probable members. The number of new stars
+            # generated in each star position is the weight assigned to that
+            # star times 10. We do this so the KDE obtained below incorporates
+            # the information of the weights, ie: the membership probabilities.
             col_intrsc_w = list(chain.from_iterable([i] * int(round(j* 10)) \
             for i, j in zip(col_intrsc, memb_above_lim[2])))
             mag_intrsc_w = list(chain.from_iterable([i] * int(round(j* 10)) \
@@ -382,7 +400,8 @@ for indx, sub_dir in enumerate(sub_dirs):
         
   
             # Get KDE for CMD intrinsic position of most probable members.
-            x, y = np.mgrid[col1_min_int:col1_max_int:100j, mag_min_int:mag_max_int:100j]
+            x, y = np.mgrid[col1_min_int:col1_max_int:100j,
+                            mag_min_int:mag_max_int:100j]
             positions = np.vstack([x.ravel(), y.ravel()])
             values = np.vstack([col_intrsc_w, mag_intrsc_w])
             # The results are HEAVILY dependant on the bandwidth used here.
@@ -392,7 +411,8 @@ for indx, sub_dir in enumerate(sub_dirs):
             
             # Call the function that returns the sequence determined by the two
             # points further from each other in each contour level.
-            sequence, fine_tune, manual_levels = contour_levels(cluster, x, y, kde)
+            sequence, fine_tune, manual_levels = contour_levels(cluster, x, y,
+                                                                kde)
         
 
             # If the contour points returns an empty list don't attempt to
@@ -407,7 +427,8 @@ for indx, sub_dir in enumerate(sub_dirs):
                 # Store the sequence obtained with this cluster in final list.
                 final_zams.append(sequence)
                 # Also store the parameters associated with this cluster.
-                final_zams_params.append([cluster, cl_e_bv, cl_age, cl_feh, cl_dmod])
+                final_zams_params.append([cluster, cl_e_bv, cl_age, cl_feh,
+                                          cl_dmod])
             else:
                 x_pol, y_pol = [], []
 
@@ -422,9 +443,11 @@ for indx, sub_dir in enumerate(sub_dirs):
             line = zip(*[name, ['%.2f' % i for i in x_pol],
                          ['%.2f' % i for i in y_pol], e_bv, age, feh, dmod])
             with open(out_file, 'w') as f_out:
-                f_out.write("#Name x_zams y_zams E(B-V) Age (Gyr) [Fe/H] (m-M)o\n")
+                f_out.write("#Name x_zams y_zams E(B-V) Age (Gyr) [Fe/H]\
+(m-M)o\n")
                 for item in line:
-                    f_out.write('{:<10} {:>10} {:>10} {:>10} {:>10} {:>10} {:>10}'.format(*item))
+                    f_out.write('{:<10} {:>10} {:>10} {:>10} {:>10} {:>10} \
+{:>10}'.format(*item))
                     f_out.write('\n')        
         
         
@@ -692,10 +715,10 @@ def make_final_plot(metal_range):
         map(list, zip(*sorted(zip(ages, names, names_feh, final_zams_poli),
                               reverse=True)))
         
-        # figsize(x1, y1), GridSpec(y2, x2) -> To have square plots: x1/x2 = y1/y2 = 2.5 
+        # figsize(x1, y1), GridSpec(y2, x2) -> To have square plots:
+        # x1/x2 = y1/y2 = 2.5 
         fig = plt.figure(figsize=(40, 25)) # create the top-level container
         gs = gridspec.GridSpec(10, 16)  # create a GridSpec object
-    #    fig, ax1 = plt.subplots()
     
         ax1 = plt.subplot(gs[1:9, 1:8])    
         plt.ylim(9, -3)
@@ -714,7 +737,8 @@ def make_final_plot(metal_range):
         k = 0
         for (x, y), color, label in zip(final_zams_poli_s, ages_s, names_feh_s):
             # Transform color value.
-            m, h = 1./(max(ages_s) - min(ages_s)), min(ages_s)/(min(ages_s) - max(ages_s))
+            m, h = 1./(max(ages_s) - min(ages_s)), \
+            min(ages_s)/(min(ages_s) - max(ages_s))
             col_transf = m*color+h
             l, = plt.plot(x, y, label=label, color=cmap(col_transf), lw=2.)
             pos = [(x[-2]+x[-1])/2.+0.15, (y[-2]+y[-1])/2.]
@@ -731,12 +755,13 @@ def make_final_plot(metal_range):
         cbar.ax.tick_params(which='major', length=12, labelsize=24)
         
         # Add legend.        
-        ax1.legend(loc="upper right", markerscale=1.5, scatterpoints=2, fontsize=16)
+        ax1.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
+                   fontsize=16)
         # Add text box
         text = r'%0.2f $\leq$ [Fe/H] $\leq$ %0.2f' % (metal_min, metal_max )
         plt.text(0.355, 0.975, text, transform=ax1.transAxes,
-                 bbox=dict(facecolor='gray', alpha=0.1, boxstyle='round,pad=0.4'),\
-                 fontsize=24)
+                 bbox=dict(facecolor='gray', alpha=0.1,
+                           boxstyle='round,pad=0.4'), fontsize=24)
                  
                 
                 
@@ -753,9 +778,10 @@ def make_final_plot(metal_range):
         ax2.grid(b=True, which='both', color='gray', linestyle='--', lw=1)
         ax2.tick_params(axis='both', which='major', labelsize=26)
             
-        # Rearrange sequences into single list composed of two sub-lists: the first
-        # one holds the colors and the second one the magnitudes.
-        single_seq_list = [[i for v in r for i in v] for r in zip(*final_zams_poli_s)]
+        # Rearrange sequences into single list composed of two sub-lists: the
+        # first one holds the colors and the second one the magnitudes.
+        single_seq_list = [[i for v in r for i in v] for r in \
+        zip(*final_zams_poli_s)]
         
         # Obtain and plot fitting polinome for all sequences.
         poli_order = [3]
@@ -785,7 +811,8 @@ def make_final_plot(metal_range):
                      lw=2., label=text)    
                          
         # Add legend.
-        ax2.legend(loc="upper right", markerscale=1.5, scatterpoints=2, fontsize=20)
+        ax2.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
+                   fontsize=20)
         
         fig.tight_layout()
         # Generate output file for each data file.
@@ -796,7 +823,8 @@ def make_final_plot(metal_range):
         # Plot CMD for all sequences only once.
         if metal_range == 1:
             
-            # figsize(x1, y1), GridSpec(y2, x2) -> To have square plots: x1/x2 = y1/y2 = 2.5 
+            # figsize(x1, y1), GridSpec(y2, x2) -> To have square plots:
+            # x1/x2 = y1/y2 = 2.5 
             fig = plt.figure(figsize=(40, 25)) # create the top-level container
             gs = gridspec.GridSpec(10, 16)  # create a GridSpec object
         
@@ -839,9 +867,11 @@ def make_final_plot(metal_range):
                               
             cmap = plt.get_cmap('rainbow')
             k = 0
-            for (x, y), color, label in zip(final_zams_poli_s, ages_s, names_feh_s):
+            for (x, y), color, label in zip(final_zams_poli_s, ages_s,\
+            names_feh_s):
                 # Transform color value.
-                m, h = 1./(max(ages_s) - min(ages_s)), min(ages_s)/(min(ages_s) - max(ages_s))
+                m, h = 1./(max(ages_s) - min(ages_s)), \
+                min(ages_s)/(min(ages_s) - max(ages_s))
                 col_transf = m*color+h
                 l, = plt.plot(x, y, label=label, color=cmap(col_transf), lw=2.)
                 pos = [(x[-2]+x[-1])/2.+0.15, (y[-2]+y[-1])/2.]
@@ -860,7 +890,8 @@ def make_final_plot(metal_range):
             # Add text box
             ax1.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
                        fontsize=16)
-            text = r'%0.2f $\leq$ [Fe/H] $\leq$ %0.2f' % (min(feh_list), max(feh_list))
+            text = r'%0.2f $\leq$ [Fe/H] $\leq$ %0.2f' % (min(feh_list),\
+            max(feh_list))
             plt.text(0.355, 0.975, text, transform=ax1.transAxes,
                      bbox=dict(facecolor='gray', alpha=0.1,
                                boxstyle='round,pad=0.4'), fontsize=24)              
@@ -883,9 +914,10 @@ def make_final_plot(metal_range):
             ax2.grid(b=True, which='both', color='gray', linestyle='--', lw=1)
             ax2.tick_params(axis='both', which='major', labelsize=26)
                 
-            # Rearrange sequences into single list composed of two sub-lists: the first
-            # one holds the colors and the second one the magnitudes.
-            single_seq_list = [[i for v in r for i in v] for r in zip(*final_zams_poli_s)]
+            # Rearrange sequences into single list composed of two sub-lists:
+            # the first one holds the colors and the second one the magnitudes.
+            single_seq_list = [[i for v in r for i in v] for r in \
+            zip(*final_zams_poli_s)]
             
             # Obtain and plot fitting polinome for all sequences.
             poli_order = [3]
