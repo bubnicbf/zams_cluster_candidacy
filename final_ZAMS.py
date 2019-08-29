@@ -252,7 +252,7 @@ sub_dirs, cl_names, centers, radius, members, out_dir = get_cluster_params()
 # Call function to obtain each cluster's fitted isochrone data.
 extin, ages, metal, dist_mods, ocaat_path = get_iso_params(cl_names)
 
-6
+
 # Ask for minimum probability threshold.
 use_mu = False
 prob_quest = raw_input('Use mu as probability threshold? (y/n): ')
