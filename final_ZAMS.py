@@ -183,8 +183,8 @@ def contour_levels(cluster, x, y, kde):
     return sequence, fine_tune, manual_levels
             
 
-# *********************************
-# 1- Read data_output file to store names and parameters of each cluster:
+
+# Read data_output file to store names and parameters of each cluster:
 # sub dir, name, center, radius, number of members.
 
 # Set 'home' dir.
@@ -209,8 +209,8 @@ with open(data_out_file, mode="r") as d_o_f:
             members.append(float(reader[7]))
 
 
-# *********************************
-# 2- Read clusters_data_isos.dat' file to store isochrone parameters for each
+
+# Read clusters_data_isos.dat' file to store isochrone parameters for each
 # cluster (for plotting purposes only).
 
 # Location of the data_input file
@@ -233,8 +233,18 @@ for cluster in cl_names:
                     break
 
 
-# *********************************
-# 3- Read the photometric data file for each cluster.
+
+# Ask for minimum probability threshold.
+use_mu = False
+prob_quest = raw_input('Use mu as probability threshold? (y/n): ')
+if prob_quest == 'y':
+    use_mu = True
+else:
+    min_prob = float(raw_input('Input minimum probability value to use: '))
+
+
+
+# Read the photometric data file for each cluster.
 
 # Location of the photometric data file for each cluster.
 data_phot = '/media/rest/Dropbox/GABRIEL/CARRERA/3-POS-DOC/trabajo/data_all/\
@@ -255,6 +265,7 @@ for indx, sub_dir in enumerate(sub_dirs):
     if use_all_clusters:
         print sub_dir, cluster
         
+        # Get photometric data for cluster.
         filename = glob.glob(join(data_phot, sub_dir, cluster + '.*'))[0]
         id_star, x_data, y_data, mag_data, e_mag, col1_data, e_col1 = \
         gd.get_data(data_phot, sub_dir, filename)
@@ -280,8 +291,8 @@ for indx, sub_dir in enumerate(sub_dirs):
                                                                     clust_name)
                                                      
 
-    #4- Read most_prob_memb file for each cluster to store the probabilities
-    # and CMD coordinates assigned to each star.
+    # Read most_prob_memb file for each cluster to store the probabilities
+    # and CMD coordinates assigned to each sta in the cluster region.
         most_prob_memb_avrg = []
         file_path = join(out_dir+sub_dir+'/'+cluster+'_memb.dat')
         with open(file_path, mode="r") as m_f:
@@ -296,7 +307,7 @@ for indx, sub_dir in enumerate(sub_dirs):
                         most_prob_memb_avrg.append(map(float, reader))
     
     
-    #5- Outline of steps that follow:
+    # Outline of steps that follow:
     #
     # Get CMD coordinates and probabilities from most_prob_memb_avrg list. Used
     # for the third plot.
@@ -316,7 +327,7 @@ for indx, sub_dir in enumerate(sub_dirs):
         if not(flag_area_stronger):
             
             # Used when plotting all stars inside cluster radius with their
-            # probability values.
+            # probability values (third plot).
             m_p_m_temp = [[], [], []]
             for star in most_prob_memb_avrg:
                 m_p_m_temp[0].append(star[6])
@@ -327,15 +338,16 @@ for indx, sub_dir in enumerate(sub_dirs):
             # Fit gaussian to probabilities distribution. The mean will act as
             # the prob threshold. Only stars with prob values above this mean
             # will be used to trace the sequence.
-            prob_data = [star[8] for star in most_prob_memb_avrg]
-            # Best Gaussian fit of data.
-            (mu, sigma) = norm.fit(prob_data)
-            mu = 0.
+            if use_mu == True:
+                prob_data = [star[8] for star in most_prob_memb_avrg]
+                # Best Gaussian fit of data.
+                (mu, sigma) = norm.fit(prob_data)
+                min_prob = mu
 
-            # Create list with stars with probs above mu.
+            # Create list with stars with probs above min_prob.
             memb_above_lim = [[], [], []]
             for star in most_prob_memb_avrg:
-                if star[8] >= mu:
+                if star[8] >= min_prob:
                     memb_above_lim[0].append(star[6])
                     memb_above_lim[1].append(star[4])
                     memb_above_lim[2].append(star[8])
@@ -345,7 +357,7 @@ for indx, sub_dir in enumerate(sub_dirs):
                                                    memb_above_lim[1], cl_e_bv, \
                                                    cl_dmod) 
 
-            # Obtain new limits selected as to make the intrinsic CMD axis 1:1.
+            # Obtain limits selected as to make the intrinsic CMD axis 1:1.
             col1_min_int, col1_max_int = min(col_intrsc)-0.2, max(col_intrsc)+0.2
             mag_min_int, mag_max_int = max(mag_intrsc)+1., min(mag_intrsc)-1.
             delta_x = col1_max_int - col1_min_int
@@ -400,7 +412,7 @@ for indx, sub_dir in enumerate(sub_dirs):
                 x_pol, y_pol = [], []
 
         
-            # Write data to output file.
+            # Write interpolated sequence to output file.
             out_file = join(out_dir+'fitted_zams'+'/'+cluster+'_ZAMS.dat')
             name = [sub_dir+'/'+cluster]*len(x_pol)
             e_bv = [str(cl_e_bv)]*len(x_pol)
@@ -571,7 +583,8 @@ for indx, sub_dir in enumerate(sub_dirs):
             text = text1+text2+text3+text4
             plt.text(0.7, 0.83, text, transform = ax4.transAxes,
                      bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
-            plt.text(0.05, 0.93, r'$P_{lim}=%0.2f$' % mu, transform = ax4.transAxes,
+            plt.text(0.05, 0.93, r'$P_{lim}=%0.2f$' % min_prob,
+                     transform=ax4.transAxes,
                      bbox=dict(facecolor='white', alpha=0.5), fontsize=24)
             # Set minor ticks
             ax4.minorticks_on()
