@@ -218,7 +218,7 @@ def get_cluster_params():
 def get_iso_params(cl_names):
     '''
     Read clusters_data_isos.dat file to store isochrone parameters for each
-    cluster (for plotting purposes only).
+    cluster.
     '''
     
     # Location of the data_input file
@@ -308,9 +308,9 @@ data_all/cumulos-datos-fotometricos/'
                                                                     clust_name)
                                                      
 
-    # Read most_prob_memb file for each cluster to store the probabilities
+    # Read the members file for each cluster to store the probabilities
     # and CMD coordinates assigned to each sta in the cluster region.
-        most_prob_memb_avrg = []
+        prob_memb_avrg = []
         file_path = join(out_dir+sub_dir+'/'+cluster+'_memb.dat')
         with open(file_path, mode="r") as m_f:
             # Check if file is empty.
@@ -321,12 +321,12 @@ data_all/cumulos-datos-fotometricos/'
                 if not li.startswith("#"):
                     reader = li.split()     
                     if reader[0] == '99.0':
-                        most_prob_memb_avrg.append(map(float, reader))
+                        prob_memb_avrg.append(map(float, reader))
     
     
     # Outline of steps that follow:
     #
-    # Get CMD coordinates and probabilities from most_prob_memb_avrg list. Used
+    # Get CMD coordinates and probabilities from prob_memb_avrg list. Used
     # for the third plot.
     # Calculate a probability limit above which stars will be used to draw the
     # final sequence using a Gaussian fit.
@@ -345,7 +345,7 @@ data_all/cumulos-datos-fotometricos/'
             # Used when plotting all stars inside cluster radius with their
             # probability values (third plot).
             m_p_m_temp = [[], [], []]
-            for star in most_prob_memb_avrg:
+            for star in prob_memb_avrg:
                 m_p_m_temp[0].append(star[6])
                 m_p_m_temp[1].append(star[4])
                 m_p_m_temp[2].append(star[8])
@@ -355,14 +355,14 @@ data_all/cumulos-datos-fotometricos/'
             # the prob threshold. Only stars with prob values above this mean
             # will be used to trace the sequence.
             if use_mu == True:
-                prob_data = [star[8] for star in most_prob_memb_avrg]
+                prob_data = [star[8] for star in prob_memb_avrg]
                 # Best Gaussian fit of data.
                 (mu, sigma) = norm.fit(prob_data)
                 min_prob = mu
 
             # Create list with stars with probs above min_prob.
             memb_above_lim = [[], [], []]
-            for star in most_prob_memb_avrg:
+            for star in prob_memb_avrg:
                 if star[8] >= min_prob:
                     memb_above_lim[0].append(star[6])
                     memb_above_lim[1].append(star[4])
@@ -552,7 +552,7 @@ data_all/cumulos-datos-fotometricos/'
             plt.xlabel(r'$C-T_1$', fontsize=26)
             plt.ylabel(r'$T_1$', fontsize=26)
             ax3.tick_params(axis='both', which='major', labelsize=24)
-            text = r'$r \leq R_{cl}\,|\,N_{c}=%d$' % len(most_prob_memb_avrg)
+            text = r'$r \leq R_{cl}\,|\,N_{c}=%d$' % len(prob_memb_avrg)
             plt.text(0.05, 0.93, text, transform = ax3.transAxes,
                      bbox=dict(facecolor='white', alpha=0.5), fontsize=26)
             # Set minor ticks
