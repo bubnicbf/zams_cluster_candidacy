@@ -268,6 +268,28 @@ def get_zams():
 
 
 
+def get_probs(out_dir, sub_dir, cluster):
+    '''
+    Read the members file for each cluster and store the probabilities
+    and CMD coordinates assigned to each star in the cluster region.
+    '''
+    prob_memb_avrg = []
+    file_path = join(out_dir+sub_dir+'/'+cluster+'_memb.dat')
+    with open(file_path, mode="r") as m_f:
+        # Check if file is empty.
+        flag_area_stronger = False if getsize(file_path) > 44 else True
+        for line in m_f:
+            li=line.strip()
+            # Jump comments.
+            if not li.startswith("#"):
+                reader = li.split()     
+                if reader[0] == '99.0':
+                    prob_memb_avrg.append(map(float, reader))
+                    
+    return flag_area_stronger, prob_memb_avrg
+                        
+                        
+
 def write_seq_file(out_dir, cluster, x_pol, y_pol):
     '''
     Write interpolated sequence to output file.
@@ -312,7 +334,7 @@ else:
 final_zams = []
 # Also store the parameters associated with each cluster.
 final_zams_params = []
-
+# Loop through all clusters processed.
 for indx, sub_dir in enumerate(sub_dirs):
     cluster = cl_names[indx]
     
@@ -353,37 +375,25 @@ data_all/cumulos-datos-fotometricos/'
         cl_e_bv, cl_age, cl_feh, cl_dmod, iso_moved, zams_iso = g_i(mypath,
                                                                     clust_name)
                                                      
-
-    # Read the members file for each cluster to store the probabilities
-    # and CMD coordinates assigned to each sta in the cluster region.
-        prob_memb_avrg = []
-        file_path = join(out_dir+sub_dir+'/'+cluster+'_memb.dat')
-        with open(file_path, mode="r") as m_f:
-            # Check if file is empty.
-            flag_area_stronger = False if getsize(file_path) > 44 else True
-            for line in m_f:
-                li=line.strip()
-                # Jump comments.
-                if not li.startswith("#"):
-                    reader = li.split()     
-                    if reader[0] == '99.0':
-                        prob_memb_avrg.append(map(float, reader))
+        # Read the members file for each cluster and store the probabilities
+        # and CMD coordinates assigned to each star in the cluster region.
+        flag_area_stronger, prob_memb_avrg = get_probs(out_dir, sub_dir, cluster)
     
     
-    # Outline of steps that follow:
-    #
-    # Get CMD coordinates and probabilities from prob_memb_avrg list. Used
-    # for the third plot.
-    # Calculate a probability limit above which stars will be used to draw the
-    # final sequence using a Gaussian fit.
-    # Obtain intrinsic position of stars above this probability limit.
-    # Obtain new CMD limits based on these intrinsic positions.
-    # Assign weights to these corrected stars according to the probabilities
-    # they have.
-    # Obtain the (weighted) KDE for these weighted stars.
-    # Generate a fiducial sequence making use of the KDE's contours.
-    # Interpolate this sequence to obtain the final sequence.
-    # Write final interpolated sequence to data file.
+        # Outline of steps that follow:
+        #
+        # Get CMD coordinates and probabilities from prob_memb_avrg list. Used
+        # for the third plot.
+        # Calculate a probability limit above which stars will be used to draw
+        # the final sequence using a Gaussian fit.
+        # Obtain intrinsic position of stars above this probability limit.
+        # Obtain new CMD limits based on these intrinsic positions.
+        # Assign weights to these corrected stars according to the probabilities
+        # they have.
+        # Obtain the (weighted) KDE for these weighted stars.
+        # Generate a fiducial sequence making use of the KDE's contours.
+        # Interpolate this sequence to obtain the final sequence.
+        # Write final interpolated sequence to data file.
 
         # Check if decont algorithm was applied.
         if not(flag_area_stronger):
@@ -452,7 +462,6 @@ data_all/cumulos-datos-fotometricos/'
             sequence, fine_tune, manual_levels = contour_levels(cluster, x, y,
                                                                 kde)
         
-
             # If the contour points returns an empty list don't attempt to
             # plot the polynomial fit.
             if sequence[0]:
@@ -473,7 +482,6 @@ data_all/cumulos-datos-fotometricos/'
         
             # Write interpolated sequence to output file.
             write_seq_file(out_dir, cluster, x_pol, y_pol)
-        
         
             # Call function to create CMDs for this cluster.
             m_c_c(sub_dir, cluster, col1_data, mag_data, stars_out_rjct,
