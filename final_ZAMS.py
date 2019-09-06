@@ -100,7 +100,7 @@ def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
 
 
 
-def contour_levels(cluster, x, y, kde):
+def contour_levels(fine_tune, cluster, x, y, kde):
     '''This is the central function. It generates the countour plots around the
     cluster members. The extreme points of these contour levels are used to trace
     the ZAMS fiducial line for each cluster.
@@ -112,24 +112,23 @@ def contour_levels(cluster, x, y, kde):
     # 2nd: values to generate levels with np.arange()
     # 3rd: x_min, x_max, y_min and y_max. Ranges to reject points.
     # 4th: min level value to accept and min level number to accept.
-    f_t_names = ['H88-245', 'HS130', 'KMHK1702', 'LW469', 'RUP1', 'KMHK128', 'L115']
+    f_t_names = ['H88-245', 'HS130', 'KMHK1702', 'LW469', 'RUP1', 'KMHK128',
+                 'L115']
     
     f_t_range = [[0., 1.01, 0.2], [0., 1.01, 0.05], [0.3, 2.11, 0.3], \
-    [0.2, 1.21, 0.2], [0.05, 0.351, 0.05], [0.05, 1.251, 0.05], [0.15, 0.91, 0.15]]
+    [0.2, 1.21, 0.2], [0.05, 0.351, 0.05], [0.05, 1.251, 0.05],\
+    [0.15, 0.91, 0.15]]
     
     f_t_xylim = [[-1., 1., -0.2, 1.7], [-1., 1., 0.4, 3.6], [-1., 1., 1.3, 3.6],\
     [-1., 1., 1.2, 4.], [-1., 3., 1., 6.8], [-1., 0.5, 1.8, 3.6], \
     [-1., 1, -0.4, 3]]
     
-    f_t_level = [[0.1, 1], [-0.1, -1], [-0.1, -1], [-0.1, -1], [0.1, 1], [0.1, 1], \
-    [-0.1, -1]]
+    f_t_level = [[0.1, 1], [-0.1, -1], [-0.1, -1], [-0.1, -1], [0.1, 1],\
+    [0.1, 1], [-0.1, -1]]
     
-    #fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
-    fine_tune_list = [[]]
+    fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
 
-    fine_tune = False
-    if cluster in fine_tune_list[0]:
-        fine_tune = True
+    if fine_tune == True and cluster in fine_tune_list[0]:
         indx = fine_tune_list[0].index(cluster)
         manual_levels = np.arange(fine_tune_list[1][indx][0],
                                   fine_tune_list[1][indx][1],\
@@ -138,7 +137,7 @@ def contour_levels(cluster, x, y, kde):
         y_min, y_max = fine_tune_list[2][indx][2], fine_tune_list[2][indx][3]
         lev_min, lev_num = fine_tune_list[3][indx]
     else:
-        manual_levels = []
+        manual_levels = np.array([])
         x_min, x_max = -10., 10.
         y_min, y_max = -10., 10.
         lev_min, lev_num = 0.1, 1
@@ -149,7 +148,7 @@ def contour_levels(cluster, x, y, kde):
     sequence = [[], []]
 
     # Store contour levels.
-    if fine_tune == True:
+    if fine_tune == True and manual_levels.any():
         CS = plt.contour(x, y, kde, manual_levels)
     else:
         CS = plt.contour(x, y, kde)
@@ -173,7 +172,7 @@ def contour_levels(cluster, x, y, kde):
                     sequence[0].append(round(x_c[1],4))
                     sequence[1].append(round(y_c[1],4))
 
-    return sequence, fine_tune, manual_levels
+    return sequence, manual_levels
             
 
 
@@ -327,6 +326,14 @@ if prob_quest == 'y':
     use_mu = True
 else:
     min_prob = float(raw_input('Input minimum probability value to use: '))
+    
+    
+# Ask if fine tuning parameters should be used upon contour levels.
+tune_quest = raw_input('Use fine tuning parameters? (y/n): ')
+if tune_quest == 'y':
+    fine_tune = True
+else:
+    fine_tune = False
 
 
 
@@ -341,7 +348,7 @@ for indx, sub_dir in enumerate(sub_dirs):
 #    if cluster in gabriel_accept:
 #    if cluster in ruben_accept:
 #    if cluster == 'NGC2324':
-    if cluster in ['NGC2324', 'NGC2236']:
+    if cluster in ['NGC2324', 'NGC2236', 'L115']:
 #    use_all_clusters = True
 #    if use_all_clusters:
         print sub_dir, cluster
@@ -459,8 +466,8 @@ data_all/cumulos-datos-fotometricos/'
             
             # Call the function that returns the sequence determined by the two
             # points further from each other in each contour level.
-            sequence, fine_tune, manual_levels = contour_levels(cluster, x, y,
-                                                                kde)
+            sequence, manual_levels = contour_levels(fine_tune, cluster, x, y,
+                                                     kde)
         
             # If the contour points returns an empty list don't attempt to
             # plot the polynomial fit.
@@ -485,12 +492,12 @@ data_all/cumulos-datos-fotometricos/'
         
             # Call function to create CMDs for this cluster.
             m_c_c(sub_dir, cluster, col1_data, mag_data, stars_out_rjct,
-                      stars_out, stars_in_rjct, stars_in, prob_memb_avrg,
-                      popt_mag, popt_col1, cl_e_bv, cl_age, cl_feh, cl_dmod,
-                      iso_moved, zams_iso, col1_min_int, col1_max_int, 
-                      mag_min_int, mag_max_int, min_prob, fine_tune, x, y, kde,
-                      manual_levels, col_intrsc, mag_intrsc, memb_above_lim,
-                      zam_met, x_pol, y_pol, out_dir)
+                  stars_out, stars_in_rjct, stars_in, prob_memb_avrg,
+                  popt_mag, popt_col1, cl_e_bv, cl_age, cl_feh, cl_dmod,
+                  iso_moved, zams_iso, col1_min_int, col1_max_int, 
+                  mag_min_int, mag_max_int, min_prob, fine_tune, x, y, kde,
+                  manual_levels, col_intrsc, mag_intrsc, memb_above_lim,
+                  zam_met, x_pol, y_pol, out_dir)
         
 
 
