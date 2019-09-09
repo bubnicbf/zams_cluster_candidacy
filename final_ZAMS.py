@@ -67,17 +67,16 @@ piatti_accept = ['AM3', 'BSDL3158', 'BSDL594', 'BSDL761', 'C11', 'CZ26',
                  'SL674', 'SL707', 'SL72', 'SL73', 'SL869', 'SL870', 'SL96',
                  'TO1', 'TR5']
 
-gabriel_accept = ['CZ26', 'CZ30', 'H88-55', 'H88-188', 'H88-245', 'H88-333', 
-                  'HAF11', 'HS38', 'HS130', 'HS154', 'HS178', 'KMHK123',
-                  'KMHK128', 'KMHK1702', 'L102', 'L114', 'L115', 'LW469',
-                  'NGC2236', 'NGC2324', 'RUP1', 'SL72', 'SL154', 'TO1']
-                  
 ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
                 'L45', 'L50', 'L62', 'L113', 'L111', 'L114', 'L115', 'L72',
                 'CZ26', 'HAF11', 'NGC2236', 'NGC2324', 'RUP1', 'BSDL1035',
                 'H88-26', 'H88-55', 'H88-333', 'HS38', 'LW469', 'NGC2093',
                 'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
                 'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
+                  
+gabriel_accept = ['CZ26']                  
+                  
+
 
 
 def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
@@ -112,27 +111,24 @@ def contour_levels(fine_tune, cluster, x, y, kde):
     # 2nd: values to generate levels with np.arange()
     # 3rd: x_min, x_max, y_min and y_max. Ranges to reject points.
     # 4th: min level value to accept and min level number to accept.
-    f_t_names = ['H88-245', 'HS130', 'KMHK1702', 'LW469', 'RUP1', 'KMHK128',
-                 'L115']
+    f_t_names = ['CZ26']
     
-    f_t_range = [[0., 1.01, 0.2], [0., 1.01, 0.05], [0.3, 2.11, 0.3], \
-    [0.2, 1.21, 0.2], [0.05, 0.351, 0.05], [0.05, 1.251, 0.05],\
-    [0.15, 0.91, 0.15]]
+    f_t_range = [[]]
     
-    f_t_xylim = [[-1., 1., -0.2, 1.7], [-1., 1., 0.4, 3.6], [-1., 1., 1.3, 3.6],\
-    [-1., 1., 1.2, 4.], [-1., 3., 1., 6.8], [-1., 0.5, 1.8, 3.6], \
-    [-1., 1, -0.4, 3]]
+    f_t_xylim = [[-1., 3., 3.4, 7.]]
     
-    f_t_level = [[0.1, 1], [-0.1, -1], [-0.1, -1], [-0.1, -1], [0.1, 1],\
-    [0.1, 1], [-0.1, -1]]
+    f_t_level = [[-0.1, 0]]
     
     fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
 
     if fine_tune == True and cluster in fine_tune_list[0]:
         indx = fine_tune_list[0].index(cluster)
-        manual_levels = np.arange(fine_tune_list[1][indx][0],
-                                  fine_tune_list[1][indx][1],\
-                                  fine_tune_list[1][indx][2])
+        if fine_tune_list[1][indx]:
+            manual_levels = np.arange(fine_tune_list[1][indx][0],
+                                      fine_tune_list[1][indx][1],\
+                                      fine_tune_list[1][indx][2])
+        else:
+            manual_levels = np.array([])
         x_min, x_max = fine_tune_list[2][indx][0], fine_tune_list[2][indx][1]
         y_min, y_max = fine_tune_list[2][indx][2], fine_tune_list[2][indx][3]
         lev_min, lev_num = fine_tune_list[3][indx]
@@ -336,6 +332,13 @@ else:
     fine_tune = False
 
 
+# Ask if all clusters should be processed or only those in a list.
+clust_quest = raw_input('Use all clusters? (y/n): ')
+if clust_quest == 'y':
+    clust_list = cl_names
+else:
+    clust_list = gabriel_accept
+
 
 # Stores the CMD sequence obtained for each cluster.
 final_zams = []
@@ -344,13 +347,9 @@ final_zams_params = []
 # Loop through all clusters processed.
 for indx, sub_dir in enumerate(sub_dirs):
     cluster = cl_names[indx]
-    
-#    if cluster in gabriel_accept:
-#    if cluster in ruben_accept:
-#    if cluster == 'NGC2324':
-    if cluster in ['NGC2324', 'NGC2236', 'L115']:
-#    use_all_clusters = True
-#    if use_all_clusters:
+
+    # Check if cluster is in list.    
+    if cluster in clust_list:
         print sub_dir, cluster
         
         # Location of the photometric data file for each cluster.
