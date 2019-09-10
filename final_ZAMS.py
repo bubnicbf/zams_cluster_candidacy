@@ -74,7 +74,7 @@ ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
                 'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
                 'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
                   
-gabriel_accept = ['CZ26']                  
+gabriel_accept = ['BSDL654']                  
                   
 
 
@@ -109,17 +109,18 @@ def contour_levels(fine_tune, cluster, x, y, kde):
     # it.
     # 1st sub-list: Names of clusters
     # 2nd: values to generate levels with np.arange()
-    # 3rd: x_min, x_max, y_min and y_max. Ranges to reject points.
+    # 3rd: y_min and y_max. Range where sequence will be interpolated.
     # 4th: min level value to accept and min level number to accept.
-    f_t_names = ['CZ26']
+    f_t_names = ['BSDL654']
+#    'CZ26', [], [-1., 3., 3.4, 7.], [-0.1, 0]
     
     f_t_range = [[]]
     
-    f_t_xylim = [[-1., 3., 3.4, 7.]]
+    f_t_ylim = [[0.5, 3.2]]
     
-    f_t_level = [[-0.1, 0]]
+    f_t_level = [[-0.1, -1]]
     
-    fine_tune_list = [f_t_names, f_t_range, f_t_xylim, f_t_level]
+    fine_tune_list = [f_t_names, f_t_range, f_t_ylim, f_t_level]
 
     if fine_tune == True and cluster in fine_tune_list[0]:
         indx = fine_tune_list[0].index(cluster)
@@ -129,12 +130,10 @@ def contour_levels(fine_tune, cluster, x, y, kde):
                                       fine_tune_list[1][indx][2])
         else:
             manual_levels = np.array([])
-        x_min, x_max = fine_tune_list[2][indx][0], fine_tune_list[2][indx][1]
-        y_min, y_max = fine_tune_list[2][indx][2], fine_tune_list[2][indx][3]
+        y_min, y_max = fine_tune_list[2][indx][0], fine_tune_list[2][indx][1]
         lev_min, lev_num = fine_tune_list[3][indx]
     else:
         manual_levels = np.array([])
-        x_min, x_max = -10., 10.
         y_min, y_max = -10., 10.
         lev_min, lev_num = 0.1, 1
 
@@ -157,18 +156,18 @@ def contour_levels(fine_tune, cluster, x, y, kde):
             d = sp.spatial.distance.cdist(cts,cts)
             x_c,y_c = cts[list(sp.unravel_index(sp.argmax(d),d.shape))].T
             # Only store points that belong to contour PDF values larger
-            # tnah lev_min and that belong to the uper curves, ie: do not
+            # tanh lev_min and that belong to the uper curves, ie: do not
             # use those with index <= lev_num.
             if levels[i] > lev_min and i > lev_num:
                 # Only store points within these limits.
-                if x_min <= x_c[0] <= x_max and y_min <= y_c[0] <= y_max:
                     sequence[0].append(round(x_c[0],4))
                     sequence[1].append(round(y_c[0],4))
-                if x_min <= x_c[1] <= x_max and y_min <= y_c[1] <= y_max:    
                     sequence[0].append(round(x_c[1],4))
                     sequence[1].append(round(y_c[1],4))
 
-    return sequence, manual_levels
+    # Range in y axis for accepting interpolated values for the sequence.
+    y_lim = [y_min, y_max]
+    return sequence, manual_levels, y_lim
             
 
 
@@ -465,29 +464,36 @@ data_all/cumulos-datos-fotometricos/'
             
             # Call the function that returns the sequence determined by the two
             # points further from each other in each contour level.
-            sequence, manual_levels = contour_levels(fine_tune, cluster, x, y,
-                                                     kde)
+            sequence, manual_levels, y_lim = contour_levels(fine_tune, cluster,
+                                                            x, y, kde)
         
             # If the contour points returns an empty list don't attempt to
             # plot the polynomial fit.
             if sequence[0]:
-                # Obtain and plot the sequence's fitting polinome.
+
+                # Obtain the sequence's fitting polinome.
                 poli_order = 3 # Order of the polynome.
                 poli = np.polyfit(sequence[1], sequence[0], poli_order)
                 y_pol = np.linspace(min(sequence[1]), max(sequence[1]), 50)
                 p = np.poly1d(poli)
                 x_pol = [p(i) for i in y_pol]
-                # Store the sequence obtained with this cluster in final list.
-                final_zams.append(sequence)
+
+                # Trim the interpolated sequence to the range in y axis.
+                y_pol_trim, x_pol_trim = zip(*[(ia,ib) for (ia, ib) in \
+                zip(y_pol,x_pol) if y_lim[0] <= ia <= y_lim[1]])
+                
+                # Store the interpolated trimmed sequence obtained for this
+                # cluster in final list.
+                final_zams.append([x_pol_trim, y_pol_trim])
                 # Also store the parameters associated with this cluster.
                 final_zams_params.append([cluster, cl_e_bv, cl_age, cl_feh,
                                           cl_dmod])
             else:
-                x_pol, y_pol = [], []
+                x_pol_trim, y_pol_trim = [], []
 
         
             # Write interpolated sequence to output file.
-            write_seq_file(out_dir, cluster, x_pol, y_pol)
+            write_seq_file(out_dir, cluster, x_pol_trim, y_pol_trim)
         
             # Call function to create CMDs for this cluster.
             m_c_c(sub_dir, cluster, col1_data, mag_data, stars_out_rjct,
@@ -496,7 +502,7 @@ data_all/cumulos-datos-fotometricos/'
                   iso_moved, zams_iso, col1_min_int, col1_max_int, 
                   mag_min_int, mag_max_int, min_prob, fine_tune, x, y, kde,
                   manual_levels, col_intrsc, mag_intrsc, memb_above_lim,
-                  zam_met, x_pol, y_pol, out_dir)
+                  zam_met, x_pol_trim, y_pol_trim, out_dir)
         
 
 
