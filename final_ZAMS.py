@@ -156,7 +156,7 @@ def contour_levels(fine_tune, cluster, x, y, kde):
             d = sp.spatial.distance.cdist(cts,cts)
             x_c,y_c = cts[list(sp.unravel_index(sp.argmax(d),d.shape))].T
             # Only store points that belong to contour PDF values larger
-            # tanh lev_min and that belong to the uper curves, ie: do not
+            # than lev_min and that belong to the uper curves, ie: do not
             # use those with index <= lev_num.
             if levels[i] > lev_min and i > lev_num:
                 # Only store points within these limits.
