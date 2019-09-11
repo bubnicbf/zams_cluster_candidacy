@@ -118,7 +118,7 @@ def contour_levels(fine_tune, cluster, x, y, kde):
     
     f_t_ylim = [[0.5, 3.2]]
     
-    f_t_level = [[-0.1, -1]]
+    f_t_level = [[]]
     
     fine_tune_list = [f_t_names, f_t_range, f_t_ylim, f_t_level]
 
