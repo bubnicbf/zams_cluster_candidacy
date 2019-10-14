@@ -73,8 +73,13 @@ ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
                 'H88-26', 'H88-55', 'H88-333', 'HS38', 'LW469', 'NGC2093',
                 'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
                 'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
-                  
-gabriel_accept = ['BSDL654']                  
+            
+            
+gabriel_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
+                   'HAF11', 'H88-333', 'HS38', 'HS130', 'KMHK1702', 'L45',
+                   'L49']
+
+#gabriel_accept = ['H88-333'] 
                   
 
 
@@ -111,14 +116,17 @@ def contour_levels(fine_tune, cluster, x, y, kde):
     # 2nd: values to generate levels with np.arange()
     # 3rd: y_min and y_max. Range where sequence will be interpolated.
     # 4th: min level value to accept and min level number to accept.
-    f_t_names = ['BSDL654']
-#    'CZ26', [], [-1., 3., 3.4, 7.], [-0.1, 0]
+    f_t_names = ['BSDL654', 'C11', 'CZ26', 'CZ30', 'HAF11', 'H88-333', 'HS38',
+                 'HS130', 'KMHK1702', 'L45', 'L49']
     
-    f_t_range = [[]]
+    f_t_range = [[], [], [], [], [], [], [], [], [], [], []]
     
-    f_t_ylim = [[0.5, 3.2]]
+    f_t_ylim = [[0.5, 3.2], [1.4, 4.], [3.2, 5.2], [3., 7.], [1.5, 5.],
+                [1.4, 4.], [1.6, 3.], [0.3, 3.4], [2., 4.], [0., 1.7],\
+                [-0.3, 1.2]]
     
-    f_t_level = [[]]
+    f_t_level = [[], [-0.1, 0.], [], [], [-0.1, 1], [], [], [-0.1, 0.],
+                 [-0.1, -1.], [], [-0.1, 0.]]
     
     fine_tune_list = [f_t_names, f_t_range, f_t_ylim, f_t_level]
 
@@ -131,7 +139,8 @@ def contour_levels(fine_tune, cluster, x, y, kde):
         else:
             manual_levels = np.array([])
         y_min, y_max = fine_tune_list[2][indx][0], fine_tune_list[2][indx][1]
-        lev_min, lev_num = fine_tune_list[3][indx]
+        lev_min, lev_num = fine_tune_list[3][indx] if fine_tune_list[3][indx] \
+        else [-0.1, -1]
     else:
         manual_levels = np.array([])
         y_min, y_max = -10., 10.
