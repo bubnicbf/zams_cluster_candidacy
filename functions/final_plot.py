@@ -63,7 +63,7 @@ def make_final_plot(metal_range, zam_met, metals_z, metals_feh,
         gs = gridspec.GridSpec(10, 16)  # create a GridSpec object
     
         ax1 = plt.subplot(gs[1:9, 1:8])    
-        plt.ylim(9, -3)
+        plt.ylim(7, -2)
         plt.xlim(-1., 3.)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
         plt.ylabel(r'$M_{T_1}$', fontsize=28)
@@ -108,7 +108,7 @@ def make_final_plot(metal_range, zam_met, metals_z, metals_feh,
                 
                 
         ax2 = plt.subplot(gs[1:9, 9:15])    
-        plt.ylim(9, -3)
+        plt.ylim(7, -2)
         plt.xlim(-1., 3.)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
         plt.ylabel(r'$M_{T_1}$', fontsize=28)
@@ -171,7 +171,7 @@ def make_final_plot(metal_range, zam_met, metals_z, metals_feh,
             gs = gridspec.GridSpec(10, 16)  # create a GridSpec object
         
             ax1 = plt.subplot(gs[1:9, 1:8])    
-            plt.ylim(9, -3)
+            plt.ylim(7, -2)
             plt.xlim(-1., 3.)
             plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
             plt.ylabel(r'$M_{T_1}$', fontsize=28)
@@ -244,7 +244,7 @@ def make_final_plot(metal_range, zam_met, metals_z, metals_feh,
                     
         
             ax2 = plt.subplot(gs[1:9, 9:15])    
-            plt.ylim(9, -3)
+            plt.ylim(7, -2)
             plt.xlim(-1., 3.)
             plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
             plt.ylabel(r'$M_{T_1}$', fontsize=28)
