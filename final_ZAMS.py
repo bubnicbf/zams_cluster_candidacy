@@ -52,35 +52,33 @@ from scipy.stats import norm
 
 # These lists store the clusters accepted manually.
 
-piatti_accept = ['AM3', 'BSDL3158', 'BSDL594', 'BSDL761', 'C11', 'CZ26',
-                 'CZ30', 'H88-26', 'H88-52', 'H88-55', 'HAF11', 'HS130',
-                 'HS154', 'HS156', 'HS178', 'HS38', 'HW22', 'HW31', 'HW40',
-                 'HW41', 'HW59', 'HW84', 'HW86', 'IC2146', 'KMHK1055',
-                 'KMHK112', 'KMHK123', 'KMHK1668', 'KMHK1702', 'L102',
-                 'L106', 'L108', 'L110', 'L111', 'L113', 'L114', 'L115',
-                 'L30', 'L35', 'L45', 'L50', 'L58', 'L62', 'L72', 'LW211',
-                 'LW224', 'LW263', 'LW469', 'LW69', 'NGC1644', 'NGC1697',
-                 'NGC1838', 'NGC1839', 'NGC1863', 'NGC2093', 'NGC2108',
-                 'NGC2236', 'NGC2324', 'NGC2627', 'NGC339', 'SL13', 'SL133',
-                 'SL154', 'SL162', 'SL229', 'SL293', 'SL300', 'SL351', 'SL41',
-                 'SL444', 'SL446A', 'SL5', 'SL510', 'SL54', 'SL588', 'SL663',
-                 'SL674', 'SL707', 'SL72', 'SL73', 'SL869', 'SL870', 'SL96',
-                 'TO1', 'TR5']
-
-ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
-                'L45', 'L50', 'L62', 'L113', 'L111', 'L114', 'L115', 'L72',
-                'CZ26', 'HAF11', 'NGC2236', 'NGC2324', 'RUP1', 'BSDL1035',
-                'H88-26', 'H88-55', 'H88-333', 'HS38', 'LW469', 'NGC2093',
-                'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
-                'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
+#piatti_accept = ['AM3', 'BSDL3158', 'BSDL594', 'BSDL761', 'C11', 'CZ26',
+#                 'CZ30', 'H88-26', 'H88-52', 'H88-55', 'HAF11', 'HS130',
+#                 'HS154', 'HS156', 'HS178', 'HS38', 'HW22', 'HW31', 'HW40',
+#                 'HW41', 'HW59', 'HW84', 'HW86', 'IC2146', 'KMHK1055',
+#                 'KMHK112', 'KMHK123', 'KMHK1668', 'KMHK1702', 'L102',
+#                 'L106', 'L108', 'L110', 'L111', 'L113', 'L114', 'L115',
+#                 'L30', 'L35', 'L45', 'L50', 'L58', 'L62', 'L72', 'LW211',
+#                 'LW224', 'LW263', 'LW469', 'LW69', 'NGC1644', 'NGC1697',
+#                 'NGC1838', 'NGC1839', 'NGC1863', 'NGC2093', 'NGC2108',
+#                 'NGC2236', 'NGC2324', 'NGC2627', 'NGC339', 'SL13', 'SL133',
+#                 'SL154', 'SL162', 'SL229', 'SL293', 'SL300', 'SL351', 'SL41',
+#                 'SL444', 'SL446A', 'SL5', 'SL510', 'SL54', 'SL588', 'SL663',
+#                 'SL674', 'SL707', 'SL72', 'SL73', 'SL869', 'SL870', 'SL96',
+#                 'TO1', 'TR5']
+#
+#ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
+#                'L45', 'L50', 'L62', 'L113', 'L111', 'L114', 'L115', 'L72',
+#                'CZ26', 'HAF11', 'NGC2236', 'NGC2324', 'RUP1', 'BSDL1035',
+#                'H88-26', 'H88-55', 'H88-333', 'HS38', 'LW469', 'NGC2093',
+#                'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
+#                'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
             
             
-gabriel_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
+manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
                    'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130', 'KMHK128',
                    'KMHK1702', 'L45', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
                    'NGC2324', 'RUP1', 'SL72', 'TO1']
-                  
-
 
 
 def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
@@ -115,23 +113,23 @@ def contour_levels(fine_tune, cluster, x, y, kde):
     # 2nd: values to generate levels with np.arange()
     # 3rd: y_min and y_max. Range where sequence will be interpolated.
     # 4th: min level value to accept and min level number to accept.
-    f_t_names = ['BSDL654', 'C11', 'CZ26', 'CZ30', 'HAF11', 'H88-188',
+    f_t_names = ['BSDL654', 'BSDL761', 'C11', 'CZ26', 'CZ30', 'HAF11', 'H88-188',
                  'H88-333', 'HS38', 'HS130', 'KMHK128', 'KMHK1702', 'L45',
                  'L49', 'L50', 'L114', 'LW469', 'NGC2236', 'NGC2324', 'RUP1',
                  'SL72', 'TO1']
     
     f_t_range = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-                 [], [], [], [], []]
+                 [], [], [], [], [], []]
     
-    f_t_ylim = [[0.5, 3.2], [1.4, 4.], [3.2, 5.2], [3., 4.8], [1.5, 5.],
-                [1.4, 2.4], [1.4, 4.], [1.6, 3.], [0.3, 3.4], [2.4, 3.6],\
+    f_t_ylim = [[0.5, 3.2], [1., 3.], [1.4, 4.], [3.2, 5.2], [3., 4.8], [1.5, 5.],
+                [1.4, 2.4], [1.4, 4.], [1.6, 3.], [1., 3.4], [2.4, 3.6],\
                 [2., 4.], [0., 1.7], [-0.3, 1.2], [0., 2.], [0.6, 2.8],\
                 [2., 3.2], [2., 5.], [1.8, 5.], [1.6, 6.4], [1., 2.8], \
                 [2.8, 4.4]]
     
-    f_t_level = [[], [-0.1, 0.], [], [], [-0.1, 1], [], [], [], [-0.1, 0.],
+    f_t_level = [[], [], [-0.1, 0.], [], [], [-0.1, 1], [], [], [], [-0.1, 0.],
                  [-0.1, 2], [-0.1, -1.], [], [-0.1, 0.], [-0.1, 1], [],\
-                 [-0.1, 0.], [], [], [-0.1, 1.], [], []]
+                 [-0.1, 0.], [], [], [-0.1, 2.], [], []]
     
     fine_tune_list = [f_t_names, f_t_range, f_t_ylim, f_t_level]
 
@@ -163,7 +161,6 @@ def contour_levels(fine_tune, cluster, x, y, kde):
         CS = plt.contour(x, y, kde)
     # Store level values for contour levels.
     levels = CS.levels
-#    print levels
     for i,clc in enumerate(CS.collections):
         for j,pth in enumerate(clc.get_paths()):
             cts = pth.vertices
@@ -250,7 +247,7 @@ def get_zams():
     Get ZAMS in its intrinsic position from file for plotting purposes.
     '''
     
-    zams_file = 'zams_4_isos.data'
+    zams_file = 'zams.data'
     data = np.loadtxt(zams_file, unpack=True)
     # Convert z to [Fe/H] using the y=A+B*log10(x) zunzun.com function and the
     # x,y values:
@@ -261,8 +258,8 @@ def get_zams():
     # 0.019  0.0
     #    A, B = 1.7354259305164, 1.013629121876
     #    feh = A + B*np.log10(z)
-    metals_z = [0.001, 0.004, 0.008, 0.019]
-    metals_feh = [-1.3, -0.7, -0.4, 0.0]
+    metals_z = [0.001, 0.004, 0.008, 0.014, 0.019]
+    metals_feh = [-1.3, -0.7, -0.4, -0.15, 0.0]
     
     # List that holds all the isochrones of different metallicities.
     zam_met = [[] for _ in range(len(metals_z))]
@@ -350,7 +347,7 @@ clust_quest = raw_input('Use all clusters? (y/n): ')
 if clust_quest == 'y':
     clust_list = cl_names
 else:
-    clust_list = gabriel_accept
+    clust_list = manual_accept
 
 
 # Stores the CMD sequence obtained for each cluster.
@@ -522,10 +519,12 @@ data_all/cumulos-datos-fotometricos/'
 
 # Call to plot the 3 metallicty ranges.
 print '\nPlotting sequences by metallicity interval'
+# Define metallicity intervals.
+metal_ranges = [[-0.7, -0.7], [-0.3, -0.3], [-0.15, 0.]]
 for i in range(3):
     print 'Plotting %d' % i
-    m_f_p(i, zam_met, metals_z, metals_feh, final_zams_params, final_zams,
-          out_dir)
+    m_f_p(i, metal_ranges[i], zam_met, metals_z, metals_feh, final_zams_params,
+          final_zams, out_dir)
 
 
 print 'End.'
