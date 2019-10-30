@@ -12,22 +12,15 @@ import matplotlib.gridspec as gridspec
 from matplotlib.ticker import MultipleLocator
 
 
-def make_final_plot(fig_num, metal_range, zam_met, metals_z, metals_feh,
+def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                     final_zams_params, final_zams, out_dir):
     '''
     Print the final plot with all the sequences superimposed and fitted by a
     polynomial.
     '''
-    
-#    if metal_range == 0:
-#        metal_min, metal_max = -1.4, -0.71
-#    elif metal_range == 1:
-#        metal_min, metal_max = -0.7, -0.4
-#    elif metal_range == 2:
-#        metal_min, metal_max = -0.39, 0.
 
-    metal_min, metal_max = metal_range[0], metal_range[1]
-        
+    # Store min and max metallicity ranges.
+    metal_min, metal_max = m_rang[0], m_rang[1]
         
     # Store ages in array.
     ages, names, names_feh = [], [], []
@@ -145,7 +138,8 @@ def make_final_plot(fig_num, metal_range, zam_met, metals_z, metals_feh,
         max_met = min(range(len(metals_feh)), key=lambda i: \
         abs(metals_feh[i]-metal_max))
         a = [min_met, max_met]
-        for j in range(2):
+        k = 1 if min_met == max_met else 2
+        for j in range(k):
             text1 = 'z = %0.3f' '\n' % metals_z[a[j]]
             text2 = '[Fe/H] = %0.2f' % metals_feh[a[j]]
             text = text1+text2

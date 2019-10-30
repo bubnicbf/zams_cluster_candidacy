@@ -520,10 +520,12 @@ data_all/cumulos-datos-fotometricos/'
 # Call to plot the 3 metallicty ranges.
 print '\nPlotting sequences by metallicity interval'
 # Define metallicity intervals.
-metal_ranges = [[-0.7, -0.7], [-0.3, -0.3], [-0.15, 0.]]
-for i in range(3):
-    print 'Plotting %d' % i
-    m_f_p(i, metal_ranges[i], zam_met, metals_z, metals_feh, final_zams_params,
+metal_ranges = [[-0.7, -0.7], [-0.4, -0.4], [-0.3, -0.3], [-0.15, 0.]]
+
+# Create a plot for each metallicity range defined.
+for indx,m_rang in enumerate(metal_ranges):
+    print 'Plotting %d' % indx
+    m_f_p(indx, m_rang, zam_met, metals_z, metals_feh, final_zams_params,
           final_zams, out_dir)
 
 
