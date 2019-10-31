@@ -41,11 +41,14 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
             final_zams_params[indx][3] <= metal_max:
                 # Obtain and plot fitting polinome.
                 poli = np.polyfit(seq[1], seq[0], 3)
-                y_pol = np.linspace(min(seq[1]), max(seq[1]), 50)
+                y_pol = np.linspace(min(seq[1]), max(seq[1]), 50).tolist()
                 p = np.poly1d(poli)
                 x_pol = [p(i) for i in y_pol]
                 final_zams_poli.append([x_pol, y_pol])    
-        
+
+        # Obtain plotting limits.        
+        min_lim = np.min(np.min(final_zams_poli, axis=2) ,axis=0)
+        max_lim = np.max(np.max(final_zams_poli, axis=2) ,axis=0)      
         
         # Sort all lists according to age.
         ages_s, names_s, names_feh_s, final_zams_poli_s = \
@@ -57,9 +60,9 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         fig = plt.figure(figsize=(40, 25)) # create the top-level container
         gs = gridspec.GridSpec(10, 16)  # create a GridSpec object
     
-        ax1 = plt.subplot(gs[1:9, 1:8])    
-        plt.ylim(7, -2)
-        plt.xlim(-1., 3.)
+        ax1 = plt.subplot(gs[1:9, 1:8])   
+        plt.xlim(min_lim[0]-0.5, max_lim[0]+0.5)
+        plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
         plt.ylabel(r'$M_{T_1}$', fontsize=28)
         # Ticks.
@@ -103,8 +106,8 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                 
                 
         ax2 = plt.subplot(gs[1:9, 9:15])    
-        plt.ylim(7, -2)
-        plt.xlim(-1., 3.)
+        plt.xlim(min_lim[0]-0.5, max_lim[0]+0.5)
+        plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
         plt.ylabel(r'$M_{T_1}$', fontsize=28)
         # Ticks.
@@ -156,4 +159,5 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                     dpi=150)
 
     else:
-        print 'Skipped %d' % metal_range
+        print 'Skipped %d' % fig_num
+        
