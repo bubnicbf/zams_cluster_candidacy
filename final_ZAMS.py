@@ -388,8 +388,8 @@ data_all/cumulos-datos-fotometricos/'
         mypath = ocaat_path
         clust_name = cluster
         # Get manually fitted parameters for cluster, if these exist.
-        cl_e_bv, cl_age, cl_feh, cl_dmod, iso_moved, zams_iso = g_i(mypath,
-                                                                    clust_name)
+        cl_e_bv, cl_age, cl_feh, cl_dmod, iso_moved, zams_iso, iso_intrsc = \
+        g_i(mypath, clust_name)
                                                      
         # Read the members file for each cluster and store the probabilities
         # and CMD coordinates assigned to each star in the cluster region.
@@ -510,7 +510,7 @@ data_all/cumulos-datos-fotometricos/'
             m_c_c(sub_dir, cluster, col1_data, mag_data, stars_out_rjct,
                   stars_out, stars_in_rjct, stars_in, prob_memb_avrg,
                   popt_mag, popt_col1, cl_e_bv, cl_age, cl_feh, cl_dmod,
-                  iso_moved, zams_iso, col1_min_int, col1_max_int, 
+                  iso_moved, iso_intrsc, zams_iso, col1_min_int, col1_max_int, 
                   mag_min_int, mag_max_int, min_prob, fine_tune, x, y, kde,
                   manual_levels, col_intrsc, mag_intrsc, memb_above_lim,
                   zam_met, x_pol_trim, y_pol_trim, out_dir)
