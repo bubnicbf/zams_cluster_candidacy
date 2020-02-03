@@ -61,7 +61,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         gs = gridspec.GridSpec(10, 16)  # create a GridSpec object
     
         ax1 = plt.subplot(gs[1:9, 1:8])   
-        plt.xlim(min_lim[0]-0.5, max_lim[0]+0.5)
+        plt.xlim(min_lim[0]-1., max_lim[0]+1.)
         plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
         plt.ylabel(r'$M_{T_1}$', fontsize=28)
@@ -94,6 +94,17 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         cbar.set_label(r'Age (Gyr)', fontsize=26, labelpad=20)
         cbar.ax.tick_params(which='major', length=12, labelsize=24)
         
+        # Find ZAMS to plot according to the metallicity range used.
+        min_met = min(range(len(metals_feh)), key=lambda i: \
+        abs(metals_feh[i]-metal_min))
+        max_met = min(range(len(metals_feh)), key=lambda i: \
+        abs(metals_feh[i]-metal_max))
+        a = [min_met, max_met]
+        # Plot ZAMS envelope.
+        k = 1 if min_met == max_met else 2
+        for j in range(k):
+            plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls='--', lw=1.5)
+        
         # Add legend.        
         ax1.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
                    fontsize=16)
@@ -106,7 +117,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                 
                 
         ax2 = plt.subplot(gs[1:9, 9:15])    
-        plt.xlim(min_lim[0]-0.5, max_lim[0]+0.5)
+        plt.xlim(min_lim[0]-1., max_lim[0]+1.)
         plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
         plt.ylabel(r'$M_{T_1}$', fontsize=28)
@@ -136,18 +147,13 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                      label='ZAMS (%d)' % order)
                  
         # Plot ZAMS envelope.
-        min_met = min(range(len(metals_feh)), key=lambda i: \
-        abs(metals_feh[i]-metal_min))
-        max_met = min(range(len(metals_feh)), key=lambda i: \
-        abs(metals_feh[i]-metal_max))
-        a = [min_met, max_met]
         k = 1 if min_met == max_met else 2
         for j in range(k):
             text1 = 'z = %0.3f' '\n' % metals_z[a[j]]
             text2 = '[Fe/H] = %0.2f' % metals_feh[a[j]]
             text = text1+text2
             plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls='--',
-                     lw=2., label=text)    
+                     lw=1.5, label=text)    
                          
         # Add legend.
         ax2.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
