@@ -81,8 +81,8 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
             min(ages_s)/(min(ages_s) - max(ages_s))
             col_transf = m*color+h
             l, = plt.plot(x, y, label=label, color=cmap(col_transf), lw=2.)
-            pos = [(x[-2]+x[-1])/2.+0.15, (y[-2]+y[-1])/2.]
-            pos = [x[-1], y[-1]+0.1]
+#            pos = [(x[-2]+x[-1])/2.+0.15, (y[-2]+y[-1])/2.]
+            pos = [x[-1], y[-1]+0.04]
             plt.text(pos[0], pos[1], names_s[k], size=16, rotation=0,
                      color=l.get_color(), ha="center", va="center",\
                      bbox=dict(ec='1',fc='1', alpha=0.6))        
