@@ -6,27 +6,10 @@ Created on Wed Nov  6 16:49:53 2013
 """
 
 '''
-Script to produce a reduced image for each cluster. It only prints the full
-finding chart for the frame, the field and cluster CMDs and the final
-cluster CMD composed of only the most probable members.
-It also outputs a data file for each cluster containing the ZAMS traced by its
-members.
+Trace a cluster's star sequence using the intrinsic (corrected) CMD and the
+probabilities assigned to each star by a decontamination algorithm.
 
-
-1- Read data_output file to store names and parameters of each cluster:
-   sub dir, name, center, radius, number of members.
-2- Read clusters_data_isos.dat file to store isochrone parameters for each
-   cluster.
-3- Read the photometric data file for each cluster.
-4- Read most_prob_memb file for each cluster to store the probabilities
-and CMD coordinates assigned to each star.
-
-5- Create the finding chart using the x,y coordinates, the assigned center
-coordinates and the radius.
-6- Create the r>R_c CMD using the color and magnitude of each star, the
-assigned center and radius for the cluster.
-7- Create the cluster CMD using the same process as above.
-8- Create the last CMD using the data from the last file read.
+See README.md file for more information.
 '''
 
 
