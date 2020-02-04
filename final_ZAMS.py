@@ -145,7 +145,7 @@ def contour_levels(fine_tune, cluster, x, y, kde):
 def get_cluster_params():
     '''
     Read data_output file to store names and parameters of each cluster:
-    sub dir, name, center, radius, number of members.
+    sub dir, name, center and radius.
     '''
     
     # Set 'home' dir.
@@ -155,7 +155,7 @@ def get_cluster_params():
     out_dir = home+'/clusters/clusters_out/washington_KDE-Scott/'
     data_out_file = out_dir+'data_output'
     
-    sub_dirs, cl_names, centers, radius, members = [], [], [[],[]], [], []
+    sub_dirs, cl_names, centers, radius = [], [], [[],[]], []
     with open(data_out_file, mode="r") as d_o_f:
         for line in d_o_f:
             li=line.strip()
@@ -167,9 +167,8 @@ def get_cluster_params():
                 centers[0].append(float(reader[1]))
                 centers[1].append(float(reader[2]))
                 radius.append(float(reader[3]))
-                members.append(float(reader[7]))
                 
-    return sub_dirs, cl_names, centers, radius, members, out_dir
+    return sub_dirs, cl_names, centers, radius, out_dir
 
 
 
@@ -274,7 +273,7 @@ def write_seq_file(out_dir, cluster, x_pol, y_pol):
 
 
 # Call function to obtain clusters locations, names. etc.
-sub_dirs, cl_names, centers, radius, members, out_dir = get_cluster_params()
+sub_dirs, cl_names, centers, radius, out_dir = get_cluster_params()
 
 
 # Call function to obtain each cluster's fitted isochrone data.
