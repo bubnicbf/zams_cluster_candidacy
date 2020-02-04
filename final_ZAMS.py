@@ -172,35 +172,6 @@ def get_cluster_params():
 
 
 
-def get_iso_params(cl_names):
-    '''
-    Read clusters_data_isos.dat file to store isochrone parameters for each
-    cluster.
-    '''
-    
-    # Location of the data_input file
-    ocaat_path = '/media/rest/github/OCAAT_code/'
-    data_isos_file = ocaat_path+'clusters_data_isos.dat'
-    
-    extin, ages, metal, dist_mods = [], [], [], []
-    for cluster in cl_names:
-        with open(data_isos_file, mode="r") as d_i_f:
-            for line in d_i_f:
-                li=line.strip()
-                # Jump comments.
-                if not li.startswith("#"):
-                    reader = li.split()     
-                    if reader[0] == cluster:
-                        extin.append(reader[1])
-                        ages.append(float(reader[2]))
-                        metal.append(float(reader[3]))
-                        dist_mods.append(float(reader[4]))
-                        break
-                    
-    return extin, ages, metal, dist_mods, ocaat_path
-
-
-
 def get_zams():
     '''
     Get ZAMS in its intrinsic position from file for plotting purposes.
@@ -276,10 +247,6 @@ def write_seq_file(out_dir, cluster, x_pol, y_pol):
 sub_dirs, cl_names, centers, radius, out_dir = get_cluster_params()
 
 
-# Call function to obtain each cluster's fitted isochrone data.
-extin, ages, metal, dist_mods, ocaat_path = get_iso_params(cl_names)
-
-
 # Get ZAMS located at its instinsic position for plotting purposes.
 zam_met, metals_z, metals_feh = get_zams()
 
@@ -344,11 +311,11 @@ data_all/cumulos-datos-fotometricos/'
         gio.get_in_out(center_cl, clust_rad[0], acpt_stars, rjct_stars)
         
         # Path where the code is running
-        mypath = ocaat_path
+        ocaat_path = '/media/rest/github/OCAAT_code/'
         clust_name = cluster
         # Get manually fitted parameters for cluster, if these exist.
         cl_e_bv, cl_age, cl_feh, cl_dmod, iso_moved, zams_iso, iso_intrsc = \
-        g_i(mypath, clust_name)
+        g_i(ocaat_path, clust_name)
                                                      
         # Read the members file for each cluster and store the probabilities
         # and CMD coordinates assigned to each star in the cluster region.
