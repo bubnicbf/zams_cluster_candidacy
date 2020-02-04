@@ -322,25 +322,9 @@ data_all/cumulos-datos-fotometricos/'
         flag_area_stronger, prob_memb_avrg = get_probs(out_dir, sub_dir, cluster)
     
     
-        # Outline of steps that follow:
-        #
-        # Get CMD coordinates and probabilities from prob_memb_avrg list. Used
-        # for the third plot.
-        # Calculate a probability limit above which stars will be used to draw
-        # the final sequence using a Gaussian fit.
-        # Obtain intrinsic position of stars above this probability limit.
-        # Obtain new CMD limits based on these intrinsic positions.
-        # Assign weights to these corrected stars according to the probabilities
-        # they have.
-        # Obtain the (weighted) KDE for these weighted stars.
-        # Generate a fiducial sequence making use of the KDE's contours.
-        # Interpolate this sequence to obtain the final sequence.
-        # Write final interpolated sequence to data file.
-
         # Check if decont algorithm was applied.
         if not(flag_area_stronger):
             
-           
             # Fit gaussian to probabilities distribution. The mean will act as
             # the prob threshold. Only stars with prob values above this mean
             # will be used to trace the sequence.
