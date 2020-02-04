@@ -33,39 +33,6 @@ from scipy.stats import norm
 
 
 
-# These lists store the clusters accepted manually.
-
-#piatti_accept = ['AM3', 'BSDL3158', 'BSDL594', 'BSDL761', 'C11', 'CZ26',
-#                 'CZ30', 'H88-26', 'H88-52', 'H88-55', 'HAF11', 'HS130',
-#                 'HS154', 'HS156', 'HS178', 'HS38', 'HW22', 'HW31', 'HW40',
-#                 'HW41', 'HW59', 'HW84', 'HW86', 'IC2146', 'KMHK1055',
-#                 'KMHK112', 'KMHK123', 'KMHK1668', 'KMHK1702', 'L102',
-#                 'L106', 'L108', 'L110', 'L111', 'L113', 'L114', 'L115',
-#                 'L30', 'L35', 'L45', 'L50', 'L58', 'L62', 'L72', 'LW211',
-#                 'LW224', 'LW263', 'LW469', 'LW69', 'NGC1644', 'NGC1697',
-#                 'NGC1838', 'NGC1839', 'NGC1863', 'NGC2093', 'NGC2108',
-#                 'NGC2236', 'NGC2324', 'NGC2627', 'NGC339', 'SL13', 'SL133',
-#                 'SL154', 'SL162', 'SL229', 'SL293', 'SL300', 'SL351', 'SL41',
-#                 'SL444', 'SL446A', 'SL5', 'SL510', 'SL54', 'SL588', 'SL663',
-#                 'SL674', 'SL707', 'SL72', 'SL73', 'SL869', 'SL870', 'SL96',
-#                 'TO1', 'TR5']
-#
-#ruben_accept = ['SL444', 'NGC1838', 'NGC1863', 'SL218', 'NGC1997', 'L35',
-#                'L45', 'L50', 'L62', 'L113', 'L111', 'L114', 'L115', 'L72',
-#                'CZ26', 'HAF11', 'NGC2236', 'NGC2324', 'RUP1', 'BSDL1035',
-#                'H88-26', 'H88-55', 'H88-333', 'HS38', 'LW469', 'NGC2093',
-#                'SL154', 'SL300', 'SL588', 'L58', 'NGC419', 'IC2146',
-#                'NGC1644', 'NGC2108', 'SL869', 'BSDL654', 'BSDL779', 'HS130']
-            
-            
-manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
-                   'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130',
-                   'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
-                   'NGC2324', 'RUP1', 'SL72', 'TO1']
-                   
-# Quitados: L45,  KMHK128 
-
-
 def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
     '''
     Takes *observed* color and magnitude lists and returns corrected or
@@ -85,6 +52,11 @@ def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
     return col_intrsc, mag_intrsc
 
 
+# This list store the clusters accepted manually.
+manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
+                   'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130',
+                   'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
+                   'NGC2324', 'RUP1', 'SL72', 'TO1']
 
 def contour_levels(fine_tune, cluster, x, y, kde):
     '''This is the central function. It generates the countour plots around the
@@ -92,8 +64,8 @@ def contour_levels(fine_tune, cluster, x, y, kde):
     the ZAMS fiducial line for each cluster.
     '''
     
-    # This list holds the names and tuning parameters for those clusters that need
-    # it.
+    # This list holds the names and tuning parameters for those clusters that
+    # need it.
     # 1st sub-list: Names of clusters
     # 2nd: values to generate levels with np.arange()
     # 3rd: y_min and y_max. Range where sequence will be interpolated.
