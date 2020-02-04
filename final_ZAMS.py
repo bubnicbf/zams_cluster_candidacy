@@ -124,7 +124,7 @@ def contour_levels(fine_tune, cluster, x, y, kde):
                  [], [], [], [], [], []]
     
     f_t_ylim = [[0.5, 3.2], [1., 3.], [1.4, 4.], [3.2, 5.2], [3., 4.8], [1.5, 5.],
-                [1.4, 2.4], [1.4, 4.], [1.6, 3.], [1., 3.4], [2.4, 3.6],\
+                [1.8, 2.7], [1.4, 4.], [1.6, 3.], [1., 3.4], [2.4, 3.6],\
                 [2., 4.], [0., 1.2], [-0.3, 1.2], [0.8, 1.8], [1.6, 2.8],\
                 [2., 3.2], [2., 5.], [1.8, 5.], [1.6, 6.4], [1., 2.8], \
                 [2.8, 4.4]]
@@ -521,10 +521,11 @@ data_all/cumulos-datos-fotometricos/'
 
 # Call to plot the 3 metallicty ranges.
 print '\nPlotting sequences by metallicity interval'
-# Define metallicity intervals.
-metal_ranges = [[-0.7, -0.7], [-0.4, -0.4], [-0.3, -0.3], [-0.15, 0.]]
+# Define metallicity intervals to plot.
+metal_ranges = [[-1.4, -0.71], [-0.7, -0.7], [-0.4, -0.4], [-0.3, -0.3],
+                [-0.15, 0.01]]
 
-# Create a plot for each metallicity range defined.
+# Create a plot for each metallicity range defined above.
 for indx,m_rang in enumerate(metal_ranges):
     print 'Plotting %d' % indx
     m_f_p(indx, m_rang, zam_met, metals_z, metals_feh, final_zams_params,

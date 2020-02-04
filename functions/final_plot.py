@@ -25,7 +25,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
     # Store ages in array.
     ages, names, names_feh = [], [], []
     for seq_param in final_zams_params:
-        if seq_param[3] >= metal_min and seq_param[3] <= metal_max:
+        if metal_min <= seq_param[3] <= metal_max:
             ages.append(seq_param[2])
             names.append(seq_param[0])
             names_feh.append(seq_param[0]+' ('+str(seq_param[3])+')')
@@ -37,8 +37,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         # Create new interpolated list.
         final_zams_poli = []
         for indx, seq in enumerate(final_zams):
-            if final_zams_params[indx][3] >= metal_min and \
-            final_zams_params[indx][3] <= metal_max:
+            if metal_min <= final_zams_params[indx][3] <= metal_max:
                 # Obtain and plot fitting polinome.
                 poli = np.polyfit(seq[1], seq[0], 3)
                 y_pol = np.linspace(min(seq[1]), max(seq[1]), 50).tolist()
@@ -109,7 +108,10 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         ax1.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
                    fontsize=16)
         # Add text box
-        text = r'%0.2f $\leq$ [Fe/H] $\leq$ %0.2f' % (metal_min, metal_max )
+        if metal_min == metal_max :
+            text = r'[Fe/H] $=$ %0.2f' % (metal_min)
+        else:
+            text = r'%0.2f $\leq$ [Fe/H] $<$ %0.2f' % (metal_min, metal_max )
         plt.text(0.355, 0.975, text, transform=ax1.transAxes,
                  bbox=dict(facecolor='gray', alpha=0.1,
                            boxstyle='round,pad=0.4'), fontsize=24)
