@@ -134,7 +134,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         single_seq_list = [[i for v in r for i in v] for r in \
         zip(*final_zams_poli_s)]
         # Obtain and plot fitting polinome for all sequences.
-        poli_order = [3, 4]
+        poli_order = [3]
         pol_col = ['r', 'b']
         for j, order in enumerate(poli_order):
             poli_zams = np.polyfit(single_seq_list[1], single_seq_list[0], order)
@@ -175,7 +175,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         single_seq_list = [[i for v in r for i in v] for r in \
         zip(*final_zams_poli_s)]
         # Obtain and plot fitting polinome for all sequences.
-        poli_order = [3, 4]
+        poli_order = [3]
         pol_col = ['r', 'b']
         for j, order in enumerate(poli_order):
             poli_zams = np.polyfit(single_seq_list[1], single_seq_list[0], order)
