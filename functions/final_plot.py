@@ -104,7 +104,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
             plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls='--', lw=1.5)
         # Add legend.        
         leg = ax1.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
-                   fontsize=16)
+                   fontsize=18)
         leg.get_frame().set_alpha(0.5)
         # Add text box
         if metal_min == metal_max :
@@ -154,7 +154,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                      lw=1.5, label=text)    
         # Add legend.
         leg = ax2.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
-                   fontsize=20)
+                   fontsize=18)
         leg.get_frame().set_alpha(0.5)
         
         
@@ -195,7 +195,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                      lw=1.5, label=text)    
         # Add legend.
         leg = ax3.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
-                   fontsize=20)
+                   fontsize=18)
         leg.get_frame().set_alpha(0.5)
                    
         
