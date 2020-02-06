@@ -140,12 +140,13 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                      label='ZAMS (%d)' % order)
         # Plot ZAMS envelope.
         k = 1 if min_met == max_met else 2
+        ls_lst = ['--', '-.']
         for j in range(k):
             text1 = 'z = %0.3f' '\n' % metals_z[a[j]]
             text2 = '[Fe/H] = %0.2f' % metals_feh[a[j]]
             text = text1+text2
-            plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls='--',
-                     lw=1.5, label=text)    
+            plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls=ls_lst[j],
+                     lw=2., label=text)    
         # Add legend.
         leg = ax2.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
                    fontsize=18)
@@ -181,12 +182,13 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                      label='ZAMS (%d)' % order)
         # Plot ZAMS envelope.
         k = 1 if min_met == max_met else 2
+        ls_lst = ['--', '-.']
         for j in range(k):
             text1 = 'z = %0.3f' '\n' % metals_z[a[j]]
             text2 = '[Fe/H] = %0.2f' % metals_feh[a[j]]
             text = text1+text2
-            plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls='--',
-                     lw=1.5, label=text)    
+            plt.plot(zam_met[a[j]][3], zam_met[a[j]][2], c='k', ls=ls_lst[j],
+                     lw=2., label=text)    
         # Add legend.
         leg = ax3.legend(loc="upper right", markerscale=1.5, scatterpoints=2,
                    fontsize=18)

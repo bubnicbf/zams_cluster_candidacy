@@ -53,12 +53,12 @@ def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
 
 
 # This list store the clusters accepted manually.
-manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
-                   'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130',
-                   'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
-                   'NGC2324', 'RUP1', 'SL72', 'TO1']
+#manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
+#                   'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130',
+#                   'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
+#                   'NGC2324', 'RUP1', 'SL72', 'TO1']
 
-#manual_accept = ['BSDL654', 'BSDL761', 'BSDL779']
+manual_accept = ['BSDL654', 'BSDL761', 'BSDL779']
                    
 
 def contour_levels(fine_tune, cluster, x, y, kde):
