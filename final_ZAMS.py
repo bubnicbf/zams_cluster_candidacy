@@ -430,17 +430,65 @@ data_all/cumulos-datos-fotometricos/'
         
 
 
-# Call to plot the 3 metallicty ranges.
 print '\nPlotting sequences by metallicity interval'
 # Define metallicity intervals to plot.
 metal_ranges = [[-1.4, -0.71], [-0.7, -0.7], [-0.4, -0.4], [-0.3, -0.3],
                 [-0.15, 0.01]]
 
+
 # Create a plot for each metallicity range defined above.
 for indx,m_rang in enumerate(metal_ranges):
     print 'Plotting %d' % indx
-    m_f_p(indx, m_rang, zam_met, metals_z, metals_feh, final_zams_params,
-          final_zams, out_dir)
+    
+    
+    # Store in arrays the ages, names and names + ages for clusters inside the
+    # metallicty range being processed.
+    ages, names, names_feh = [], [], []
+    for seq_param in final_zams_params:
+        if m_rang[0] <= seq_param[3] <= m_rang[1]:
+            ages.append(seq_param[2])
+            names.append(seq_param[0])
+            names_feh.append(seq_param[0]+' ('+str(round(seq_param[2], 2))+')')
+    ages = np.array(ages)
 
+    # Skip if no sequences are inside this metallicity range.
+    if len(ages) > 0:
+    
+        # Create interpolated ZMS.
+        final_zams_poli = []
+        for indx, seq in enumerate(final_zams):
+            if m_rang[0] <= final_zams_params[indx][3] <= m_rang[1]:
+                # Obtain fitting polinome.
+                poli = np.polyfit(seq[1], seq[0], 3)
+                y_pol = np.linspace(min(seq[1]), max(seq[1]), 50).tolist()
+                p = np.poly1d(poli)
+                x_pol = [p(i) for i in y_pol]
+                final_zams_poli.append([x_pol, y_pol])   
+                        
+        # Sort all lists according to age.
+        ages_s, names_s, names_feh_s, final_zams_poli_s = \
+        map(list, zip(*sorted(zip(ages, names, names_feh, final_zams_poli),
+                              reverse=True)))                    
+                        
+        # Rearrange sequences into single list composed of two sub-lists: the
+        # first one holds the colors and the second one the magnitudes.
+        single_seq_list = [[i for v in r for i in v] for r in \
+        zip(*final_zams_poli_s)]
+        
+        # Generate interpolated final ZAMS uding the clusters sequences.
+        pol_ord = 3
+        poli_zams = np.polyfit(single_seq_list[1], single_seq_list[0], pol_ord)
+        zy_pol = np.linspace(min(single_seq_list[1]),
+                            max(single_seq_list[1]), 50)
+        p = np.poly1d(poli_zams)
+        zx_pol = [p(i) for i in zy_pol]
+
+        # Call function to generate plot for the metallicity range.
+        m_f_p(indx, ages_s, names_s, names_feh_s, final_zams_poli_s, m_rang[0],
+              m_rang[1], zam_met, metals_z, metals_feh, zx_pol, zy_pol, out_dir)
+    
+    else:
+        print 'Skipped %d' % indx
+        
 
 print 'End.'
