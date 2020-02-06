@@ -177,7 +177,7 @@ def make_cluster_cmds(sub_dir, cluster, col1_data, mag_data, stars_out_rjct,
     ax4.tick_params(axis='both', which='major', labelsize=24)
     # Add text box
     text1 = r'$E_{(B-V)} = %0.2f}$' '\n' % cl_e_bv
-    text2 = r'$Age = %0.3f}$' '\n' % cl_age
+    text2 = r'$Age = %0.2f}$' '\n' % cl_age
     text3 = r'$[Fe/H] = %0.2f}$' '\n' % cl_feh
     text4 = r'$(m-M)_o = %0.2f}$' % cl_dmod
     text = text1+text2+text3+text4
