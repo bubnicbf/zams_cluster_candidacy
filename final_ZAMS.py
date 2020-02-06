@@ -454,22 +454,17 @@ for indx,m_rang in enumerate(metal_ranges):
     # Skip if no sequences are inside this metallicity range.
     if len(ages) > 0:
     
-        # Create interpolated ZMS.
+        # Store interpolated (and possibly trimmed) sequences in single list.
         final_zams_poli = []
         for indx, seq in enumerate(final_zams):
             if m_rang[0] <= final_zams_params[indx][3] <= m_rang[1]:
-                # Obtain fitting polinome.
-                poli = np.polyfit(seq[1], seq[0], 3)
-                y_pol = np.linspace(min(seq[1]), max(seq[1]), 50).tolist()
-                p = np.poly1d(poli)
-                x_pol = [p(i) for i in y_pol]
-                final_zams_poli.append([x_pol, y_pol])   
-                        
+                final_zams_poli.append([list(seq[0]), list(seq[1])]) 
+
         # Sort all lists according to age.
         ages_s, names_s, names_feh_s, final_zams_poli_s = \
         map(list, zip(*sorted(zip(ages, names, names_feh, final_zams_poli),
-                              reverse=True)))                    
-                        
+                              reverse=True)))         
+        
         # Rearrange sequences into single list composed of two sub-lists: the
         # first one holds the colors and the second one the magnitudes.
         single_seq_list = [[i for v in r for i in v] for r in \
