@@ -28,7 +28,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         if metal_min <= seq_param[3] <= metal_max:
             ages.append(seq_param[2])
             names.append(seq_param[0])
-            names_feh.append(seq_param[0]+' ('+str(seq_param[3])+')')
+            names_feh.append(seq_param[0]+' ('+str(seq_param[2])+')')
     ages = np.array(ages)
 
     # Skip if no sequences are inside this metallicity range.
