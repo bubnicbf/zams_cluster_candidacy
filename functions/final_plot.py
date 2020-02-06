@@ -60,7 +60,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         gs = gridspec.GridSpec(10, 30)  # create a GridSpec object
     
     
-        ax1 = plt.subplot(gs[1:9, 0:11])   
+        ax1 = plt.subplot(gs[1:9, 0:10])   
         plt.xlim(min_lim[0]-1., max_lim[0]+1.)
         plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
@@ -86,12 +86,6 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                      color=l.get_color(), ha="center", va="center",\
                      bbox=dict(ec='1',fc='1', alpha=0.6))        
             k += 1
-        # Plot colorbar.
-        m = plt.cm.ScalarMappable(cmap=cmap)
-        m.set_array(ages_s)
-        cbar = plt.colorbar(m)
-        cbar.set_label(r'Age (Gyr)', fontsize=26, labelpad=20)
-        cbar.ax.tick_params(which='major', length=12, labelsize=24)
         # Find ZAMS to plot according to the metallicity range used.
         min_met = min(range(len(metals_feh)), key=lambda i: \
         abs(metals_feh[i]-metal_min))
@@ -117,7 +111,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
                  
                 
                 
-        ax2 = plt.subplot(gs[1:9, 11:20])    
+        ax2 = plt.subplot(gs[1:9, 10:20])    
         plt.xlim(min_lim[0]-1., max_lim[0]+1.)
         plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)
@@ -158,7 +152,7 @@ def make_final_plot(fig_num, m_rang, zam_met, metals_z, metals_feh,
         leg.get_frame().set_alpha(0.5)
         
         
-        ax3 = plt.subplot(gs[1:9, 20:29])
+        ax3 = plt.subplot(gs[1:9, 20:30])
         plt.xlim(min_lim[0]-1., max_lim[0]+1.)
         plt.ylim(max_lim[1]+0.5, min_lim[1]-0.5)
         plt.xlabel(r'$(C-T_1)_o$', fontsize=28)

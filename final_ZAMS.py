@@ -58,7 +58,7 @@ manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
                    'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
                    'NGC2324', 'RUP1', 'SL72', 'TO1']
 
-#manual_accept = ['BSDL654']
+#manual_accept = ['BSDL654', 'BSDL761', 'BSDL779']
                    
 
 def contour_levels(fine_tune, cluster, x, y, kde):
