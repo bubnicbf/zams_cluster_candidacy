@@ -23,7 +23,7 @@ def make_final_plot(fig_num, ages_s, names_s, names_feh_s, final_zams_poli_s,
     # Obtain global plotting limits.        
     arr = np.array(final_zams_poli_s)
     min_lim = map(lambda x: min(map(min, x)), zip(*arr))
-    max_lim = map(lambda x: min(map(max, x)), zip(*arr))
+    max_lim = map(lambda x: max(map(max, x)), zip(*arr))
     
     
     # figsize(x1, y1), GridSpec(y2, x2) -> To have square plots:

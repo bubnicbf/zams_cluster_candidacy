@@ -53,12 +53,12 @@ def intrsc_values(col_obsrv, mag_obsrv, e_bv, dist_mod):
 
 
 # This list store the clusters accepted manually.
-#manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
-#                   'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130',
-#                   'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
-#                   'NGC2324', 'RUP1', 'SL72', 'TO1']
+manual_accept = ['BSDL654', 'BSDL761', 'BSDL779', 'C11', 'CZ26', 'CZ30',
+                   'H88-188', 'H88-333', 'HAF11', 'HS38', 'HS130',
+                   'KMHK1702', 'L49', 'L50', 'L114', 'LW469', 'NGC2236',
+                   'NGC2324', 'RUP1', 'SL72', 'TO1']
 
-manual_accept = ['BSDL654', 'BSDL761', 'BSDL779']
+#manual_accept = ['BSDL654', 'BSDL761', 'BSDL779']
                    
 
 def contour_levels(fine_tune, cluster, x, y, kde):
@@ -437,8 +437,8 @@ metal_ranges = [[-1.4, -0.71], [-0.7, -0.7], [-0.4, -0.4], [-0.3, -0.3],
 
 
 # Create a plot for each metallicity range defined above.
-for indx,m_rang in enumerate(metal_ranges):
-    print 'Plotting %d' % indx
+for indx_met,m_rang in enumerate(metal_ranges):
+    print 'Plotting %d' % indx_met
     
     
     # Store in arrays the ages, names and names + ages for clusters inside the
@@ -470,7 +470,7 @@ for indx,m_rang in enumerate(metal_ranges):
         single_seq_list = [[i for v in r for i in v] for r in \
         zip(*final_zams_poli_s)]
         
-        # Generate interpolated final ZAMS uding the clusters sequences.
+        # Generate interpolated final ZAMS using the clusters sequences.
         pol_ord = 3
         poli_zams = np.polyfit(single_seq_list[1], single_seq_list[0], pol_ord)
         zy_pol = np.linspace(min(single_seq_list[1]),
@@ -479,11 +479,11 @@ for indx,m_rang in enumerate(metal_ranges):
         zx_pol = [p(i) for i in zy_pol]
 
         # Call function to generate plot for the metallicity range.
-        m_f_p(indx, ages_s, names_s, names_feh_s, final_zams_poli_s, m_rang[0],
+        m_f_p(indx_met, ages_s, names_s, names_feh_s, final_zams_poli_s, m_rang[0],
               m_rang[1], zam_met, metals_z, metals_feh, zx_pol, zy_pol, out_dir)
     
     else:
-        print 'Skipped %d' % indx
+        print 'Skipped %d' % indx_met
         
 
 print 'End.'
